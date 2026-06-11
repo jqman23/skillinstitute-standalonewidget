@@ -1172,11 +1172,12 @@ function showSessionPopup(s, anchor, tz, abbr) {
   document.getElementById("spTags").innerHTML       = s.tagLabels.map(t => `<span class="sp-popup-tag">${t}</span>`).join("");
 
   sessionPopup.style.display = "block";
-  const rect = anchor.getBoundingClientRect();
+  const rect   = anchor.getBoundingClientRect();
+  const popH   = sessionPopup.offsetHeight;
   let top  = rect.top - 8;
   let left = rect.right + 10;
   if (left + 310 > window.innerWidth) left = rect.left - 315;
-  if (top + 200 > window.innerHeight) top  = window.innerHeight - 210;
+  if (top + popH + 8 > window.innerHeight) top = window.innerHeight - popH - 8;
   if (top < 8) top = 8;
   sessionPopup.style.top  = top  + "px";
   sessionPopup.style.left = left + "px";

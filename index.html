@@ -1169,6 +1169,16 @@ function navigateToSession(code) {
   });
 }
 
+function loadHtml2Pdf() {
+  if (window.html2pdf) return Promise.resolve();
+  return new Promise((res, rej) => {
+    const sc = document.createElement("script");
+    sc.src = "https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js";
+    sc.onload = res; sc.onerror = rej;
+    document.head.appendChild(sc);
+  });
+}
+
 function downloadPDF(code) {
   const s = sessions.find(x => x.code === code);
   if (!s) return;
@@ -1180,92 +1190,71 @@ function downloadPDF(code) {
   const dateLabel = sUtc.toLocaleDateString("en-US", { weekday:"long", month:"long", day:"numeric", timeZone:tz });
 
   const BANNER = "https://custom.cvent.com/AE944F71438646268B70FF5BF3772347/files/event/e7d15afcf2b14901ab0272ce8a401899/4c40728a45af4e0289e8075b9759c684.png";
+  const SL = "font-size:9px;font-weight:700;color:#187089;text-transform:uppercase;letter-spacing:0.06em;border-bottom:1.5px solid #e8eaed;padding-bottom:4px;margin-bottom:11px;";
 
-  // Left-bar accent colors per objective category
   const objAccent = { why:["#888","#fafafa"], how:["#187089","#f0f7f9"], practice:["#3d8a3d","#f0f7f0"], transfer:["#7c4dbd","#f5f0fc"] };
   const objHtml = ["why","how","practice","transfer"].map(k => {
     const o = s.objectives[k];
     const [border, bg] = objAccent[k];
-    return `<div style="background:${bg};border-left:3px solid ${border};padding:11px 13px;break-inside:avoid;">
-      <div style="font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#122345;margin-bottom:1px;">${o.label}</div>
-      <div style="font-size:0.6rem;color:#777;margin-bottom:7px;">${o.sub}</div>
-      <ul style="margin:0;padding-left:13px;">${o.items.map(it=>`<li style="font-size:0.69rem;color:#333;line-height:1.5;margin-bottom:3px;">${it}</li>`).join("")}</ul>
+    return `<div style="background:${bg};border-left:3px solid ${border};padding:10px 12px;">
+      <div style="font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#122345;margin-bottom:1px;">${o.label}</div>
+      <div style="font-size:8px;color:#777;margin-bottom:6px;">${o.sub}</div>
+      <ul style="margin:0;padding-left:12px;">${o.items.map(it=>`<li style="font-size:9px;color:#333;line-height:1.5;margin-bottom:2px;">${it}</li>`).join("")}</ul>
     </div>`;
   }).join("");
 
   const speakersHtml = s.speakers.map(sp => {
     const photoHtml = sp.photo
-      ? `<img src="${sp.photo}" style="width:52px;height:52px;border-radius:50%;object-fit:cover;border:2px solid #e8eaed;flex-shrink:0;">`
-      : `<div style="width:52px;height:52px;border-radius:50%;background:#e8eaed;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:700;color:#999;">${(sp.name||"?")[0]}</div>`;
+      ? `<img src="${sp.photo}" crossorigin="anonymous" style="width:50px;height:50px;border-radius:50%;object-fit:cover;border:2px solid #e8eaed;flex-shrink:0;">`
+      : `<div style="width:50px;height:50px;border-radius:50%;background:#e8eaed;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:#999;">${(sp.name||"?")[0]}</div>`;
     const bioHtml = (sp.bio||"").replace(/\n\n/g,"<br><br>").replace(/\n/g,"<br>");
-    return `<div style="display:flex;gap:14px;margin-bottom:18px;align-items:flex-start;break-inside:avoid;">
+    return `<div style="display:flex;gap:13px;margin-bottom:16px;align-items:flex-start;">
       ${photoHtml}
       <div style="flex:1;">
-        <div style="font-weight:700;color:#122345;font-size:0.84rem;line-height:1.25;">${sp.name}</div>
-        ${sp.title?`<div style="color:#187089;font-size:0.71rem;font-weight:600;margin-top:2px;">${sp.title}</div>`:""}
-        ${sp.org?`<div style="color:#888;font-size:0.67rem;margin-top:1px;">${sp.org}</div>`:""}
-        ${sp.bio?`<div style="color:#444;font-size:0.71rem;line-height:1.6;margin-top:7px;">${bioHtml}</div>`:""}
+        <div style="font-weight:700;color:#122345;font-size:11px;line-height:1.3;">${sp.name}</div>
+        ${sp.title?`<div style="color:#187089;font-size:9px;font-weight:600;margin-top:2px;">${sp.title}</div>`:""}
+        ${sp.org?`<div style="color:#888;font-size:9px;margin-top:1px;">${sp.org}</div>`:""}
+        ${sp.bio?`<div style="color:#444;font-size:9px;line-height:1.6;margin-top:6px;">${bioHtml}</div>`:""}
       </div>
     </div>`;
   }).join("");
 
-  const html = `<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>${s.title}</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    *{box-sizing:border-box;margin:0;padding:0;}
-    body{font-family:'Montserrat',sans-serif;color:#222;background:#fff;}
-    .content{padding:22px 40px 40px;}
-    @media print{
-      @page{size:letter;margin:0;}
-      body{background:#fff;}
-    }
-    .section-label{font-size:0.6rem;font-weight:700;color:#187089;text-transform:uppercase;letter-spacing:0.06em;border-bottom:1.5px solid #e8eaed;padding-bottom:4px;margin-bottom:11px;}
-  </style>
-</head>
-<body>
-  <img src="${BANNER}" style="width:100%;display:block;" alt="A Global Gathering for the Future of Child Welfare">
-  <div class="content">
-    <div style="margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid #e8eaed;">
-      <div style="font-size:0.58rem;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:6px;">Skill Building Institute</div>
-      <div style="font-size:1.35rem;font-weight:700;color:#122345;line-height:1.2;margin-bottom:4px;">${s.title}</div>
-      <div style="font-size:0.83rem;font-weight:600;color:#187089;margin-bottom:10px;">${s.subtitle}</div>
-      <div style="font-size:0.74rem;font-weight:600;color:#555;">${dateLabel} &nbsp;·&nbsp; ${timeLabel}${abbr ? " " + abbr : ""}</div>
+  // Build element off-screen (816px = 8.5in at 96dpi)
+  const el = document.createElement("div");
+  el.style.cssText = "position:fixed;top:-99999px;left:0;width:816px;background:#fff;font-family:'Montserrat',Arial,sans-serif;";
+  el.innerHTML = `
+    <img src="${BANNER}" crossorigin="anonymous" style="width:100%;display:block;" alt="">
+    <div style="padding:20px 38px 36px;">
+      <div style="margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid #e8eaed;">
+        <div style="font-size:7.5px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:5px;">Skill Building Institute</div>
+        <div style="font-size:20px;font-weight:700;color:#122345;line-height:1.2;margin-bottom:3px;">${s.title}</div>
+        <div style="font-size:12px;font-weight:600;color:#187089;margin-bottom:8px;">${s.subtitle}</div>
+        <div style="font-size:10px;font-weight:600;color:#555;">${dateLabel} &nbsp;·&nbsp; ${timeLabel}${abbr?" "+abbr:""}</div>
+      </div>
+      <div style="${SL}">About This Session</div>
+      <div style="font-size:10px;line-height:1.65;color:#333;margin-bottom:16px;">${s.description}</div>
+      <div style="${SL}">Learning Objectives</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;">${objHtml}</div>
     </div>
+    <div style="page-break-before:always;padding:20px 38px 36px;">
+      <div style="${SL}">Presenters</div>
+      ${speakersHtml}
+    </div>`;
 
-    <div class="section-label">About This Session</div>
-    <div style="font-size:0.79rem;line-height:1.65;color:#333;margin-bottom:20px;">${s.description}</div>
+  document.body.appendChild(el);
 
-    <div class="section-label">Learning Objectives</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:22px;">${objHtml}</div>
+  const filename = s.title.replace(/[^a-z0-9 ]/gi,"").trim().replace(/\s+/g,"-").toLowerCase()+".pdf";
 
-    <div class="section-label">Presenters</div>
-    ${speakersHtml}
-  </div>
-</body>
-</html>`;
-
-  // Print via hidden iframe so user stays on current tab
-  const iframe = document.createElement("iframe");
-  iframe.style.cssText = "position:fixed;top:-9999px;left:-9999px;width:850px;height:1100px;border:none;opacity:0;pointer-events:none;";
-  document.body.appendChild(iframe);
-  const doc = iframe.contentDocument || iframe.contentWindow.document;
-  doc.open(); doc.write(html); doc.close();
-
-  const imgs = Array.from(doc.querySelectorAll("img"));
-  const ready = imgs.length === 0 ? Promise.resolve()
-    : Promise.all(imgs.map(img => img.complete ? Promise.resolve()
-        : new Promise(r => { img.onload = r; img.onerror = r; })));
-
-  ready.then(() => setTimeout(() => {
-    iframe.contentWindow.focus();
-    iframe.contentWindow.print();
-    setTimeout(() => { try { document.body.removeChild(iframe); } catch(e){} }, 3000);
-  }, 400));
+  loadHtml2Pdf().then(() => html2pdf().set({
+    margin: 0,
+    filename,
+    image: { type: "jpeg", quality: 0.97 },
+    html2canvas: { scale: 2, useCORS: true, logging: false },
+    jsPDF: { unit: "mm", format: "letter", orientation: "portrait" },
+    pagebreak: { mode: ["css","legacy"] }
+  }).from(el).save()).finally(() => {
+    try { document.body.removeChild(el); } catch(e) {}
+  });
 }
 
 // ─── TOOLTIP ───────────────────────────────────────────────────────────────

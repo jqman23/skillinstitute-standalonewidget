@@ -1180,7 +1180,7 @@ function renderSpeakers() {
       </div>
       <div class="sp-bio clamped" id="spbio-${s.code}-${i}">${sp.bio || ""}</div>
       <button class="sp-expand-btn" onclick="toggleSpBio(this,'spbio-${s.code}-${i}')">Show full details <span class="sp-expand-icon" id="spicon-${s.code}-${i}">▼</span></button>
-      <div class="sp-session-label">Session</div>
+      <div class="sp-session-label">Skill Building Institute</div>
       <button class="sp-session-tag" data-code="${s.code}">
         <div class="sp-session-tag-title">${s.title}</div>
         <div class="sp-session-time">${timeLabel}${abbr ? " " + abbr : ""}</div>
@@ -1208,12 +1208,17 @@ function showSessionPopup(s, anchor, tz, abbr) {
   document.getElementById("spTags").innerHTML       = s.tagLabels.map(t => `<span class="sp-popup-tag">${t}</span>`).join("");
 
   sessionPopup.style.display = "block";
-  const rect   = anchor.getBoundingClientRect();
-  const popH   = sessionPopup.offsetHeight;
-  let top  = rect.top - 8;
-  let left = rect.right + 10;
-  if (left + 310 > window.innerWidth) left = rect.left - 315;
-  if (top + popH + 8 > window.innerHeight) top = window.innerHeight - popH - 8;
+  const rect  = anchor.getBoundingClientRect();
+  const popW  = sessionPopup.offsetWidth  || 300;
+  const popH  = sessionPopup.offsetHeight || 200;
+  const gap   = 10;
+  // prefer right of anchor, flip left if needed, clamp to viewport
+  let left = rect.right + gap;
+  if (left + popW > window.innerWidth - 8)  left = rect.left - popW - gap;
+  if (left < 8) left = 8;
+  // align top to anchor, clamp so bottom stays in view
+  let top = rect.top;
+  if (top + popH > window.innerHeight - 8)  top = window.innerHeight - popH - 8;
   if (top < 8) top = 8;
   sessionPopup.style.top  = top  + "px";
   sessionPopup.style.left = left + "px";

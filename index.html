@@ -1476,15 +1476,20 @@ function notifyHeight() {
   const h = Math.ceil(document.body.getBoundingClientRect().height);
   if (window.parent !== window) window.parent.postMessage({ ggWidgetHeight: h }, "*");
 }
-notifyHeight();
+
+// Init — render first, then measure after layout is complete
+render();
+
+// Double-RAF ensures the browser has finished layout/paint before we measure
+requestAnimationFrame(() => requestAnimationFrame(notifyHeight));
+// Also re-measure after fonts load (swap can shift heights)
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(notifyHeight);
+
 if (typeof ResizeObserver !== "undefined") {
   new ResizeObserver(notifyHeight).observe(document.body);
 } else {
   window.addEventListener("resize", notifyHeight);
 }
-
-// Init
-render();
 </script>
 </body>
 </html>

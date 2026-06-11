@@ -92,6 +92,19 @@ body {
 .view-toggle:hover { border-color: #187089; color: #187089; }
 .view-toggle.active { background: #187089; color: #fff; border-color: #187089; }
 .view-toggle svg { flex-shrink: 0; }
+.ctrl-text-btn {
+  border: none;
+  background: none;
+  font-family: "Montserrat", sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #aaa;
+  cursor: pointer;
+  padding: 0;
+  transition: color .15s;
+  white-space: nowrap;
+}
+.ctrl-text-btn:hover { color: #122345; }
 
 /* ── SPEAKER GRID ───────────────────────────────────────────────────────── */
 #speakerContent { display: none; }
@@ -216,7 +229,7 @@ body {
   position: fixed;
   z-index: 9998;
   width: 300px;
-  pointer-events: none;
+  pointer-events: auto;
 }
 #sessionPopup .sp-popup-inner {
   background: #fff;
@@ -444,6 +457,22 @@ body {
   transition: color .15s;
 }
 .expand-btn:hover { color: #122345; }
+.pdf-btn {
+  border: none;
+  background: none;
+  font-family: "Montserrat", sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #bbb;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0;
+  margin-left: auto;
+  transition: color .15s;
+}
+.pdf-btn:hover { color: #187089; }
 .expand-icon {
   display: inline-block;
   transition: transform .25s ease;
@@ -551,6 +580,9 @@ body {
     <div class="ctrl-divider"></div>
     <button class="filter-toggle" id="filterDayEve">Daytime &amp; Evening Hours</button>
     <div class="ctrl-divider"></div>
+    <button class="ctrl-text-btn" onclick="setAllCards(true)">Expand All</button>
+    <button class="ctrl-text-btn" onclick="setAllCards(false)">Collapse All</button>
+    <div class="ctrl-divider"></div>
     <button class="view-toggle" id="toggleSpeakers">
       <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
         <circle cx="6" cy="5" r="3" stroke="currentColor" stroke-width="1.5"/>
@@ -581,6 +613,9 @@ body {
   <div class="sp-popup-time" id="spTime"></div>
   <div class="sp-popup-desc" id="spDesc"></div>
   <div class="sp-popup-tags" id="spTags"></div>
+  <div style="border-top:1px solid #f0f2f5;margin-top:10px;padding-top:10px;">
+    <button class="expand-btn" id="spViewBtn">View full details <span class="expand-icon">▼</span></button>
+  </div>
 </div></div>
 
 <!-- GLOBAL SPEAKER TOOLTIP -->
@@ -1038,6 +1073,10 @@ function render() {
           <button class="expand-btn" onclick="toggleCard(this,'${s.code}')" aria-expanded="false">
             View full details <span class="expand-icon" id="icon-${s.code}">▼</span>
           </button>
+          <button class="pdf-btn" onclick="downloadPDF('${s.code}')" title="Download one-page PDF">
+            <svg width="13" height="13" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 12.5h10M8 2v8m0 0L5.5 7.5M8 10l2.5-2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            PDF
+          </button>
         </div>
         <div class="card-detail" id="detail-${s.code}">
           <div class="objectives-grid">${objHtml}</div>
@@ -1058,23 +1097,173 @@ function render() {
 function toggleCard(btn, code) {
   const desc   = document.getElementById("desc-"+code);
   const detail = document.getElementById("detail-"+code);
-  const icon   = document.getElementById("icon-"+code);
+  const icon   = btn.querySelector(".expand-icon");
   const isOpen = detail.classList.contains("open");
+  const textNode = Array.from(btn.childNodes).find(n => n.nodeType === 3 && n.textContent.trim());
 
   if (isOpen) {
     desc.classList.add("clamped");
     detail.classList.remove("open");
     icon.classList.remove("open");
-    btn.childNodes[0].textContent = "View full details ";
+    if (textNode) textNode.textContent = "View full details ";
     btn.setAttribute("aria-expanded","false");
   } else {
     desc.classList.remove("clamped");
     detail.classList.add("open");
     icon.classList.add("open");
-    btn.childNodes[0].textContent = "Hide details ";
+    if (textNode) textNode.textContent = "Hide details ";
     btn.setAttribute("aria-expanded","true");
   }
   notifyHeight();
+}
+
+function setAllCards(open) {
+  document.querySelectorAll(".session-card").forEach(card => {
+    const code   = card.dataset.code;
+    const desc   = document.getElementById("desc-"+code);
+    const detail = document.getElementById("detail-"+code);
+    const btn    = card.querySelector(".expand-btn");
+    const icon   = btn && btn.querySelector(".expand-icon");
+    const textNode = btn && Array.from(btn.childNodes).find(n => n.nodeType === 3 && n.textContent.trim());
+    if (!desc || !detail) return;
+    if (open) {
+      desc.classList.remove("clamped");
+      detail.classList.add("open");
+      if (icon) icon.classList.add("open");
+      if (textNode) textNode.textContent = "Hide details ";
+      if (btn) btn.setAttribute("aria-expanded","true");
+    } else {
+      desc.classList.add("clamped");
+      detail.classList.remove("open");
+      if (icon) icon.classList.remove("open");
+      if (textNode) textNode.textContent = "View full details ";
+      if (btn) btn.setAttribute("aria-expanded","false");
+    }
+  });
+  notifyHeight();
+}
+
+function navigateToSession(code) {
+  hideSessionPopup();
+  speakerViewActive = false;
+  const toggleBtn = document.getElementById("toggleSpeakers");
+  toggleBtn.classList.remove("active");
+  toggleBtn.innerHTML = `
+    <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="6" cy="5" r="3" stroke="currentColor" stroke-width="1.5"/>
+      <path d="M1 13c0-2.76 2.24-5 5-5s5 2.24 5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      <circle cx="12" cy="5" r="2.5" stroke="currentColor" stroke-width="1.5"/>
+      <path d="M14 13c0-1.93-1.12-3.6-2.75-4.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+    Show Speakers
+  `;
+  mainContent.style.display = "";
+  speakerContent.classList.remove("visible");
+  render();
+  notifyHeight();
+  requestAnimationFrame(() => {
+    const card = document.getElementById("card-" + code);
+    if (!card) return;
+    card.scrollIntoView({ behavior: "smooth", block: "center" });
+    card.classList.remove("highlighted");
+    void card.offsetWidth;
+    card.classList.add("highlighted");
+    setTimeout(() => card.classList.remove("highlighted"), 3500);
+  });
+}
+
+function downloadPDF(code) {
+  const s = sessions.find(x => x.code === code);
+  if (!s) return;
+  const tz        = document.getElementById("timezoneSelect").value;
+  const abbr      = getTzAbbr(tz);
+  const sUtc      = easternToUtc(s.startDate, s.startTime);
+  const eUtc      = easternToUtc(s.endDate,   s.endTime);
+  const timeLabel = buildTimeLabel(sUtc, eUtc, tz);
+  const dateLabel = sUtc.toLocaleDateString("en-US", { weekday:"long", month:"long", day:"numeric", year:"numeric", timeZone:tz });
+
+  const objColors = { why:"#f5f5f5", how:"#e8f4f8", practice:"#edf7ed", transfer:"#f3eef8" };
+  const objHtml = ["why","how","practice","transfer"].map(k => {
+    const o = s.objectives[k];
+    return `<div style="background:${objColors[k]};border-radius:8px;padding:12px 14px;break-inside:avoid;">
+      <div style="font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#122345;margin-bottom:2px;">${o.label}</div>
+      <div style="font-size:0.62rem;color:#666;margin-bottom:7px;">${o.sub}</div>
+      <ul style="margin:0;padding-left:14px;">${o.items.map(it=>`<li style="font-size:0.7rem;color:#333;line-height:1.5;margin-bottom:3px;">${it}</li>`).join("")}</ul>
+    </div>`;
+  }).join("");
+
+  const speakersHtml = s.speakers.map(sp => {
+    const photoHtml = sp.photo
+      ? `<img src="${sp.photo}" style="width:54px;height:54px;border-radius:50%;object-fit:cover;border:2px solid #e8eaed;flex-shrink:0;">`
+      : `<div style="width:54px;height:54px;border-radius:50%;background:#e8eaed;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.2rem;font-weight:700;color:#999;">${(sp.name||"?")[0]}</div>`;
+    const bioHtml = (sp.bio||"").replace(/\n\n/g,"<br><br>").replace(/\n/g,"<br>");
+    return `<div style="display:flex;gap:14px;margin-bottom:20px;align-items:flex-start;break-inside:avoid;">
+      ${photoHtml}
+      <div style="flex:1;">
+        <div style="font-weight:700;color:#122345;font-size:0.85rem;line-height:1.25;">${sp.name}</div>
+        ${sp.title?`<div style="color:#187089;font-size:0.72rem;font-weight:600;margin-top:2px;">${sp.title}</div>`:""}
+        ${sp.org?`<div style="color:#888;font-size:0.68rem;margin-top:1px;">${sp.org}</div>`:""}
+        ${sp.bio?`<div style="color:#444;font-size:0.72rem;line-height:1.6;margin-top:7px;">${bioHtml}</div>`:""}
+      </div>
+    </div>`;
+  }).join("");
+
+  const html = `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>${s.title} — A Global Gathering 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Montserrat',sans-serif;color:#222;background:#fff;padding:40px 48px;}
+    @media print{
+      @page{size:letter;margin:0.45in 0.5in;}
+      body{padding:0;}
+      .no-print{display:none!important;}
+    }
+    .section-label{font-size:0.62rem;font-weight:700;color:#187089;text-transform:uppercase;letter-spacing:0.06em;border-bottom:1.5px solid #e8eaed;padding-bottom:5px;margin-bottom:12px;}
+  </style>
+</head>
+<body>
+  <div class="no-print" style="text-align:right;margin-bottom:20px;">
+    <button onclick="window.print()" style="background:#187089;color:#fff;border:none;padding:9px 22px;border-radius:8px;font-family:'Montserrat',sans-serif;font-size:0.78rem;font-weight:700;cursor:pointer;letter-spacing:0.02em;">Save as PDF</button>
+  </div>
+
+  <div style="border-top:4px solid #187089;padding-top:16px;margin-bottom:22px;">
+    <div style="font-size:0.6rem;font-weight:700;color:#187089;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:7px;">A Global Gathering 2026 · Skill Building Institute</div>
+    <div style="font-size:1.4rem;font-weight:700;color:#122345;line-height:1.2;margin-bottom:5px;">${s.title}</div>
+    <div style="font-size:0.85rem;font-weight:600;color:#187089;margin-bottom:12px;">${s.subtitle}</div>
+    <div style="display:inline-flex;align-items:center;gap:6px;background:#122345;color:#fff;border-radius:50px;padding:4px 13px;font-size:0.68rem;font-weight:700;margin-bottom:10px;">
+      ${dateLabel} &nbsp;·&nbsp; ${timeLabel}${abbr ? " " + abbr : ""}
+    </div><br>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;">
+      ${s.tagLabels.map(t=>`<span style="font-size:0.58rem;font-weight:700;background:#f0f2f5;color:#666;border-radius:4px;padding:2px 8px;text-transform:uppercase;letter-spacing:0.03em;">${t}</span>`).join("")}
+    </div>
+  </div>
+
+  <div class="section-label">About This Session</div>
+  <div style="font-size:0.8rem;line-height:1.65;color:#333;margin-bottom:22px;">${s.description}</div>
+
+  <div class="section-label">Learning Objectives</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:26px;">${objHtml}</div>
+
+  <div style="border-top:1.5px solid #e8eaed;padding-top:18px;">
+    <div class="section-label">Presenters</div>
+    ${speakersHtml}
+  </div>
+
+  <div class="no-print" style="text-align:center;margin-top:28px;color:#ccc;font-size:0.65rem;letter-spacing:0.03em;">A GLOBAL GATHERING 2026</div>
+
+  <script>window.onload=function(){setTimeout(window.print,800);};<\/script>
+</body>
+</html>`;
+
+  const win = window.open("", "_blank");
+  if (!win) { alert("Please allow popups to generate the PDF."); return; }
+  win.document.write(html);
+  win.document.close();
 }
 
 // ─── TOOLTIP ───────────────────────────────────────────────────────────────
@@ -1198,40 +1387,11 @@ function renderSpeakers() {
 
     // Session popup on hover of the tag button
     const tagBtn = card.querySelector(".sp-session-tag");
-    tagBtn.addEventListener("mouseenter", e => showSessionPopup(s, tagBtn, tz, abbr));
-    tagBtn.addEventListener("mouseleave", hideSessionPopup);
-    tagBtn.addEventListener("focus",      e => showSessionPopup(s, tagBtn, tz, abbr));
-    tagBtn.addEventListener("blur",       hideSessionPopup);
-    tagBtn.addEventListener("click", () => {
-      hideSessionPopup();
-      // switch to session view
-      speakerViewActive = false;
-      const toggleBtn = document.getElementById("toggleSpeakers");
-      toggleBtn.classList.remove("active");
-      toggleBtn.innerHTML = `
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="6" cy="5" r="3" stroke="currentColor" stroke-width="1.5"/>
-          <path d="M1 13c0-2.76 2.24-5 5-5s5 2.24 5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-          <circle cx="12" cy="5" r="2.5" stroke="currentColor" stroke-width="1.5"/>
-          <path d="M14 13c0-1.93-1.12-3.6-2.75-4.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-        </svg>
-        Show Speakers
-      `;
-      mainContent.style.display = "";
-      speakerContent.classList.remove("visible");
-      render();
-      notifyHeight();
-      // scroll to and highlight the card
-      requestAnimationFrame(() => {
-        const card = document.getElementById("card-" + s.code);
-        if (!card) return;
-        card.scrollIntoView({ behavior: "smooth", block: "center" });
-        card.classList.remove("highlighted");
-        void card.offsetWidth; // force reflow to restart animation
-        card.classList.add("highlighted");
-        setTimeout(() => card.classList.remove("highlighted"), 3500);
-      });
-    });
+    tagBtn.addEventListener("mouseenter", e => { cancelHidePopup(); showSessionPopup(s, tagBtn, tz, abbr); });
+    tagBtn.addEventListener("mouseleave", scheduleHidePopup);
+    tagBtn.addEventListener("focus",      e => { cancelHidePopup(); showSessionPopup(s, tagBtn, tz, abbr); });
+    tagBtn.addEventListener("blur",       scheduleHidePopup);
+    tagBtn.addEventListener("click",      () => navigateToSession(s.code));
 
     grid.appendChild(card);
   });
@@ -1244,9 +1404,16 @@ function truncateDesc(text, sentences) {
   return parts.slice(0, sentences).join("").trim();
 }
 
+let _popupHideTimer = null;
+function scheduleHidePopup() { _popupHideTimer = setTimeout(hideSessionPopup, 120); }
+function cancelHidePopup()   { clearTimeout(_popupHideTimer); }
+sessionPopup.addEventListener("mouseenter", cancelHidePopup);
+sessionPopup.addEventListener("mouseleave", scheduleHidePopup);
+
 function showSessionPopup(s, anchor, tz, abbr) {
   const sUtc = easternToUtc(s.startDate, s.startTime);
   const eUtc = easternToUtc(s.endDate,   s.endTime);
+  document.getElementById("spViewBtn").onclick = () => navigateToSession(s.code);
   document.getElementById("spTitle").textContent    = s.title;
   document.getElementById("spSubtitle").textContent = s.subtitle;
   document.getElementById("spTime").textContent     = buildTimeLabel(sUtc, eUtc, tz) + (abbr ? " " + abbr : "");

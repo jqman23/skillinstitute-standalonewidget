@@ -1578,6 +1578,23 @@ sel.addEventListener("change", render);
 
 // Init
 render();
+
+// ─── IFRAME AUTO-RESIZE ────────────────────────────────────────────────────
+// Sends document height to parent frame so the embed code can resize the iframe
+function notifyHeight() {
+  const h = document.documentElement.scrollHeight;
+  if (window.parent !== window) {
+    window.parent.postMessage({ ggWidgetHeight: h }, "*");
+  }
+}
+
+// Fire on load, after render, and whenever DOM size changes
+notifyHeight();
+if (typeof ResizeObserver !== "undefined") {
+  new ResizeObserver(notifyHeight).observe(document.body);
+} else {
+  window.addEventListener("resize", notifyHeight);
+}
 </script>
 </body>
 </html>

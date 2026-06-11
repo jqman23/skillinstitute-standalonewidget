@@ -56,14 +56,14 @@ body {
   max-width: 240px;
   cursor: pointer;
 }
-.filter-divider { width: 1px; height: 32px; background: #e7e5e4; flex-shrink: 0; }
+.filter-divider { width: 1px; height: 32px; background: #e0e4ea; flex-shrink: 0; }
 .hours-label {
   display: inline-flex;
   align-items: center;
   padding: 7px 14px;
   border-radius: 999px;
-  background: #f2f1ee;
-  color: #57534e;
+  background: #f4f6f9;
+  color: #444;
   font-size: 0.75rem;
   font-weight: 700;
   white-space: nowrap;
@@ -119,8 +119,7 @@ body {
 .session-card {
   background: #fff;
   border-radius: 16px;
-  border: 1px solid #ececec;
-  box-shadow: 0 4px 14px rgba(41,37,36,0.06);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
   overflow: visible;
   transition: transform .2s ease, box-shadow .2s ease;
   display: flex;
@@ -181,7 +180,7 @@ body {
   margin-left: -3px;
   cursor: help;
 }
-.speaker-line:hover, .speaker-line:focus-within { background: #fafaf9; }
+.speaker-line:hover, .speaker-line:focus-within { background: #f8fafb; }
 .speaker-avatar {
   width: 34px;
   height: 34px;
@@ -208,11 +207,11 @@ body {
   top: calc(100% + 8px);
   width: min(360px, 82vw);
   padding: 12px 14px;
-  border: 1px solid #e7e5e4;
+  border: 1px solid #e0e4ea;
   border-radius: 12px;
   background: #fff;
-  box-shadow: 0 12px 28px rgba(41,37,36,0.14);
-  color: #44403c;
+  box-shadow: 0 12px 28px rgba(0,0,0,0.12);
+  color: #444;
   font-size: 0.77rem;
   line-height: 1.5;
   opacity: 0;
@@ -221,7 +220,7 @@ body {
   transition: opacity .16s ease, transform .16s ease, visibility .16s ease;
   z-index: 10;
 }
-.speaker-tooltip strong { display:block; color:#292524; margin-bottom:4px; }
+.speaker-tooltip strong { display:block; color:#122345; margin-bottom:4px; }
 .speaker-line:hover .speaker-tooltip, .speaker-line:focus-within .speaker-tooltip {
   opacity: 1;
   visibility: visible;
@@ -1368,6 +1367,7 @@ function initials(n) { return n.split(" ").map(w=>w[0]).slice(0,2).join("").toUp
 function escapeHtml(value) {
   return String(value ?? "").replace(/[&<>"]/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[ch]));
 }
+// Image URLs are wired from the companion pricing widget headshot map.
 const speakerHeadshots = {
   "Brëanna McMullen": "https://images.squarespace-cdn.com/content/v1/65b7d5070cc6815963043fb4/7dcc7a1d-f6c3-4be3-a71f-9cf378aaa197/2.png",
   "Jess Hoeper": "https://images.squarespace-cdn.com/content/v1/65b7d5070cc6815963043fb4/7e0448c8-e5ab-485d-92ec-0989a5d90882/Conference%2Bheadshot.jpg",

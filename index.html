@@ -72,6 +72,190 @@ body {
 .filter-toggle:hover { border-color: #122345; color: #122345; }
 .filter-toggle.active { background: #122345; color: #fff; border-color: #122345; }
 
+/* ── SPEAKER VIEW BUTTON ────────────────────────────────────────────────── */
+.view-toggle {
+  border: 1.5px solid #e8eaed;
+  padding: 7px 16px;
+  border-radius: 50px;
+  background: #fff;
+  font-family: "Montserrat", sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  color: #555;
+  transition: all .18s ease;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.view-toggle:hover { border-color: #187089; color: #187089; }
+.view-toggle.active { background: #187089; color: #fff; border-color: #187089; }
+.view-toggle svg { flex-shrink: 0; }
+
+/* ── SPEAKER GRID ───────────────────────────────────────────────────────── */
+#speakerContent { display: none; }
+#speakerContent.visible { display: block; }
+.speaker-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+  align-items: start;
+}
+.sp-card {
+  background: #fff;
+  border-radius: 16px;
+  border: 1.5px solid #e8eaed;
+  padding: 20px;
+  transition: box-shadow .2s ease, transform .2s ease;
+}
+.sp-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
+.sp-card-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 12px;
+}
+.sp-photo {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #e8eaed;
+  background: #e8eaed;
+  flex-shrink: 0;
+}
+.sp-name {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #122345;
+  line-height: 1.2;
+  margin-bottom: 3px;
+}
+.sp-title {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #187089;
+  line-height: 1.3;
+}
+.sp-org {
+  font-size: 0.7rem;
+  color: #888;
+  margin-top: 2px;
+}
+.sp-bio {
+  font-size: 0.78rem;
+  line-height: 1.6;
+  color: #444;
+  margin-bottom: 14px;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.sp-session-label {
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: #999;
+  margin-bottom: 6px;
+}
+.sp-session-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: #f0f2f5;
+  border-radius: 8px;
+  padding: 6px 10px;
+  cursor: pointer;
+  transition: background .15s;
+  border: none;
+  font-family: "Montserrat", sans-serif;
+  text-align: left;
+  width: 100%;
+}
+.sp-session-tag:hover { background: #e8f4f8; }
+.sp-session-tag-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #122345;
+  line-height: 1.3;
+  flex: 1;
+}
+.sp-session-time {
+  font-size: 0.68rem;
+  color: #187089;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* ── SESSION POPUP (speaker view) ───────────────────────────────────────── */
+#sessionPopup {
+  display: none;
+  position: fixed;
+  z-index: 9998;
+  width: 300px;
+  pointer-events: none;
+}
+#sessionPopup .sp-popup-inner {
+  background: #fff;
+  border: 1.5px solid #e8eaed;
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: 0 10px 32px rgba(0,0,0,0.14);
+}
+.sp-popup-session-title {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #122345;
+  line-height: 1.3;
+  margin-bottom: 4px;
+}
+.sp-popup-subtitle {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #187089;
+  margin-bottom: 8px;
+}
+.sp-popup-time {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #fff;
+  background: #122345;
+  border-radius: 50px;
+  padding: 3px 10px;
+  margin-bottom: 10px;
+}
+.sp-popup-desc {
+  font-size: 0.75rem;
+  line-height: 1.55;
+  color: #555;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.sp-popup-tags {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+.sp-popup-tag {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  background: #f0f2f5;
+  color: #666;
+  padding: 2px 7px;
+  border-radius: 50px;
+}
+
 /* ── MAIN LAYOUT ────────────────────────────────────────────────────────── */
 .main {
   max-width: 1160px;
@@ -339,6 +523,16 @@ body {
     </div>
     <div class="ctrl-divider"></div>
     <button class="filter-toggle" id="filterDayEve">Daytime &amp; Evening Hours</button>
+    <div class="ctrl-divider"></div>
+    <button class="view-toggle" id="toggleSpeakers">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="6" cy="5" r="3" stroke="currentColor" stroke-width="1.5"/>
+        <path d="M1 13c0-2.76 2.24-5 5-5s5 2.24 5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        <circle cx="12" cy="5" r="2.5" stroke="currentColor" stroke-width="1.5"/>
+        <path d="M14 13c0-1.93-1.12-3.6-2.75-4.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      Show Speakers
+    </button>
   </div>
 </div>
 
@@ -347,6 +541,20 @@ body {
 <div class="empty-state" id="emptyState">
   <p>No sessions match the current filter.</p>
 </div>
+
+<!-- SPEAKER VIEW -->
+<div class="main" id="speakerContent">
+  <div class="speaker-grid" id="speakerGrid"></div>
+</div>
+
+<!-- SESSION POPUP -->
+<div id="sessionPopup"><div class="sp-popup-inner">
+  <div class="sp-popup-session-title" id="spTitle"></div>
+  <div class="sp-popup-subtitle" id="spSubtitle"></div>
+  <div class="sp-popup-time" id="spTime"></div>
+  <div class="sp-popup-desc" id="spDesc"></div>
+  <div class="sp-popup-tags" id="spTags"></div>
+</div></div>
 
 <!-- GLOBAL SPEAKER TOOLTIP -->
 <div id="globalTooltip" style="display:none;position:fixed;z-index:9999;pointer-events:none;width:270px;">
@@ -885,7 +1093,124 @@ document.getElementById("filterDayEve").addEventListener("click", function() {
   render();
 });
 
-sel.addEventListener("change", render);
+sel.addEventListener("change", () => { render(); if (speakerViewActive) renderSpeakers(); });
+
+// ─── SPEAKER VIEW ──────────────────────────────────────────────────────────
+let speakerViewActive = false;
+const speakerContent = document.getElementById("speakerContent");
+const mainContent    = document.getElementById("mainContent");
+const emptyState     = document.getElementById("emptyState");
+const sessionPopup   = document.getElementById("sessionPopup");
+
+// Build flat speaker list: one entry per speaker across all sessions
+function getAllSpeakers() {
+  const list = [];
+  sessions.forEach(s => {
+    s.speakers.forEach(sp => {
+      list.push({ sp, session: s });
+    });
+  });
+  // Sort alphabetically by last name
+  list.sort((a, b) => {
+    const aLast = a.sp.name.trim().split(" ").pop();
+    const bLast = b.sp.name.trim().split(" ").pop();
+    return aLast.localeCompare(bLast);
+  });
+  return list;
+}
+
+function renderSpeakers() {
+  const tz   = sel.value;
+  const abbr = (tzMap[tz] || "");
+  const grid = document.getElementById("speakerGrid");
+  grid.innerHTML = "";
+
+  getAllSpeakers().forEach(({ sp, session: s }) => {
+    const sUtc = easternToUtc(s.startDate, s.startTime);
+    const eUtc = easternToUtc(s.endDate,   s.endTime);
+    const timeLabel = buildTimeLabel(sUtc, eUtc, tz);
+    const imgSrc = sp.photo || `https://placehold.co/56x56/e8eaed/888?text=${encodeURIComponent((sp.name||"?")[0])}`;
+
+    const card = document.createElement("div");
+    card.className = "sp-card";
+    card.innerHTML = `
+      <div class="sp-card-header">
+        <img class="sp-photo" src="${imgSrc}" alt="${sp.name}"
+          onerror="this.src='https://placehold.co/56x56/e8eaed/888?text=${encodeURIComponent((sp.name||"?")[0])}'">
+        <div>
+          <div class="sp-name">${sp.name}</div>
+          <div class="sp-title">${sp.title || ""}</div>
+          ${sp.org ? `<div class="sp-org">${sp.org}</div>` : ""}
+        </div>
+      </div>
+      <div class="sp-bio">${sp.bio || ""}</div>
+      <div class="sp-session-label">Session</div>
+      <button class="sp-session-tag" data-code="${s.code}">
+        <div class="sp-session-tag-title">${s.title}</div>
+        <div class="sp-session-time">${timeLabel}${abbr ? " " + abbr : ""}</div>
+      </button>
+    `;
+
+    // Session popup on hover of the tag button
+    const tagBtn = card.querySelector(".sp-session-tag");
+    tagBtn.addEventListener("mouseenter", e => showSessionPopup(s, tagBtn, tz, abbr));
+    tagBtn.addEventListener("mouseleave", hideSessionPopup);
+    tagBtn.addEventListener("focus",      e => showSessionPopup(s, tagBtn, tz, abbr));
+    tagBtn.addEventListener("blur",       hideSessionPopup);
+
+    grid.appendChild(card);
+  });
+}
+
+function showSessionPopup(s, anchor, tz, abbr) {
+  const sUtc = easternToUtc(s.startDate, s.startTime);
+  const eUtc = easternToUtc(s.endDate,   s.endTime);
+  document.getElementById("spTitle").textContent    = s.title;
+  document.getElementById("spSubtitle").textContent = s.subtitle;
+  document.getElementById("spTime").textContent     = buildTimeLabel(sUtc, eUtc, tz) + (abbr ? " " + abbr : "");
+  document.getElementById("spDesc").textContent     = s.description;
+  document.getElementById("spTags").innerHTML       = s.tagLabels.map(t => `<span class="sp-popup-tag">${t}</span>`).join("");
+
+  sessionPopup.style.display = "block";
+  const rect = anchor.getBoundingClientRect();
+  let top  = rect.top - 8;
+  let left = rect.right + 10;
+  if (left + 310 > window.innerWidth) left = rect.left - 315;
+  if (top + 200 > window.innerHeight) top  = window.innerHeight - 210;
+  if (top < 8) top = 8;
+  sessionPopup.style.top  = top  + "px";
+  sessionPopup.style.left = left + "px";
+}
+function hideSessionPopup() { sessionPopup.style.display = "none"; }
+
+document.getElementById("toggleSpeakers").addEventListener("click", function() {
+  speakerViewActive = !speakerViewActive;
+  this.classList.toggle("active", speakerViewActive);
+  this.querySelector("span") && (this.querySelector("span").textContent = "");
+  // update button label
+  this.innerHTML = `
+    <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="6" cy="5" r="3" stroke="currentColor" stroke-width="1.5"/>
+      <path d="M1 13c0-2.76 2.24-5 5-5s5 2.24 5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      <circle cx="12" cy="5" r="2.5" stroke="currentColor" stroke-width="1.5"/>
+      <path d="M14 13c0-1.93-1.12-3.6-2.75-4.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+    ${speakerViewActive ? "Show Sessions" : "Show Speakers"}
+  `;
+
+  if (speakerViewActive) {
+    mainContent.style.display = "none";
+    emptyState.style.display  = "none";
+    speakerContent.classList.add("visible");
+    renderSpeakers();
+  } else {
+    mainContent.style.display = "";
+    speakerContent.classList.remove("visible");
+    hideSessionPopup();
+    render();
+  }
+  notifyHeight();
+});
 
 // ─── IFRAME AUTO-RESIZE ────────────────────────────────────────────────────
 function notifyHeight() {

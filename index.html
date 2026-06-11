@@ -147,12 +147,31 @@ body {
   font-size: 0.78rem;
   line-height: 1.6;
   color: #444;
-  margin-bottom: 14px;
+  margin-bottom: 8px;
+}
+.sp-bio.clamped {
   display: -webkit-box;
   -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+.sp-expand-btn {
+  border: none;
+  background: none;
+  font-family: "Montserrat", sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #187089;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 0 12px;
+  transition: color .15s;
+}
+.sp-expand-btn:hover { color: #122345; }
+.sp-expand-icon { display: inline-block; transition: transform .22s ease; font-size: 0.65rem; }
+.sp-expand-icon.open { transform: rotate(180deg); }
 .sp-session-label {
   font-size: 0.6rem;
   font-weight: 800;
@@ -1095,6 +1114,22 @@ document.getElementById("filterDayEve").addEventListener("click", function() {
 
 sel.addEventListener("change", () => { render(); if (speakerViewActive) renderSpeakers(); });
 
+function toggleSpBio(btn, id) {
+  const bio  = document.getElementById(id);
+  const icon = btn.querySelector(".sp-expand-icon");
+  const isOpen = !bio.classList.contains("clamped");
+  if (isOpen) {
+    bio.classList.add("clamped");
+    icon.classList.remove("open");
+    btn.childNodes[0].textContent = "Show full details ";
+  } else {
+    bio.classList.remove("clamped");
+    icon.classList.add("open");
+    btn.childNodes[0].textContent = "Hide details ";
+  }
+  notifyHeight();
+}
+
 // ─── SPEAKER VIEW ──────────────────────────────────────────────────────────
 let speakerViewActive = false;
 const speakerContent = document.getElementById("speakerContent");
@@ -1143,7 +1178,8 @@ function renderSpeakers() {
           ${sp.org ? `<div class="sp-org">${sp.org}</div>` : ""}
         </div>
       </div>
-      <div class="sp-bio">${sp.bio || ""}</div>
+      <div class="sp-bio clamped" id="spbio-${s.code}-${i}">${sp.bio || ""}</div>
+      <button class="sp-expand-btn" onclick="toggleSpBio(this,'spbio-${s.code}-${i}')">Show full details <span class="sp-expand-icon" id="spicon-${s.code}-${i}">▼</span></button>
       <div class="sp-session-label">Session</div>
       <button class="sp-session-tag" data-code="${s.code}">
         <div class="sp-session-tag-title">${s.title}</div>

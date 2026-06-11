@@ -254,10 +254,6 @@ body {
   font-size: 0.75rem;
   line-height: 1.55;
   color: #555;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
 }
 .sp-popup-tags {
   display: flex;
@@ -335,6 +331,15 @@ body {
   flex-direction: column;
 }
 .session-card:hover { transform: translateY(-3px); box-shadow: 0 12px 28px rgba(0,0,0,0.09); }
+@keyframes cardHighlight {
+  0%   { border-color: #e8eaed; box-shadow: none; }
+  20%  { border-color: #187089; box-shadow: 0 0 0 3px rgba(24,112,137,0.18); }
+  60%  { border-color: #187089; box-shadow: 0 0 0 3px rgba(24,112,137,0.18); }
+  100% { border-color: #e8eaed; box-shadow: none; }
+}
+.session-card.highlighted {
+  animation: cardHighlight 2s ease forwards;
+}
 
 .card-accent {
   height: 5px;
@@ -1016,6 +1021,7 @@ function render() {
 
       const card = document.createElement("div");
       card.className = "session-card";
+      card.id = "card-" + s.code;
       card.dataset.code = s.code;
       card.innerHTML = `
         <div class="card-accent"></div>
@@ -1194,9 +1200,45 @@ function renderSpeakers() {
     tagBtn.addEventListener("mouseleave", hideSessionPopup);
     tagBtn.addEventListener("focus",      e => showSessionPopup(s, tagBtn, tz, abbr));
     tagBtn.addEventListener("blur",       hideSessionPopup);
+    tagBtn.addEventListener("click", () => {
+      hideSessionPopup();
+      // switch to session view
+      speakerViewActive = false;
+      const toggleBtn = document.getElementById("toggleSpeakers");
+      toggleBtn.classList.remove("active");
+      toggleBtn.innerHTML = `
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="6" cy="5" r="3" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M1 13c0-2.76 2.24-5 5-5s5 2.24 5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          <circle cx="12" cy="5" r="2.5" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M14 13c0-1.93-1.12-3.6-2.75-4.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        Show Speakers
+      `;
+      mainContent.style.display = "";
+      speakerContent.classList.remove("visible");
+      render();
+      notifyHeight();
+      // scroll to and highlight the card
+      requestAnimationFrame(() => {
+        const card = document.getElementById("card-" + s.code);
+        if (!card) return;
+        card.scrollIntoView({ behavior: "smooth", block: "center" });
+        card.classList.remove("highlighted");
+        void card.offsetWidth; // force reflow to restart animation
+        card.classList.add("highlighted");
+        setTimeout(() => card.classList.remove("highlighted"), 2000);
+      });
+    });
 
     grid.appendChild(card);
   });
+}
+
+function truncateDesc(text, max) {
+  if (!text || text.length <= max) return text;
+  const cut = text.lastIndexOf(" ", max);
+  return text.slice(0, cut > 0 ? cut : max) + "…";
 }
 
 function showSessionPopup(s, anchor, tz, abbr) {
@@ -1205,7 +1247,7 @@ function showSessionPopup(s, anchor, tz, abbr) {
   document.getElementById("spTitle").textContent    = s.title;
   document.getElementById("spSubtitle").textContent = s.subtitle;
   document.getElementById("spTime").textContent     = buildTimeLabel(sUtc, eUtc, tz) + (abbr ? " " + abbr : "");
-  document.getElementById("spDesc").textContent     = s.description;
+  document.getElementById("spDesc").textContent     = truncateDesc(s.description, 160);
   document.getElementById("spTags").innerHTML       = s.tagLabels.map(t => `<span class="sp-popup-tag">${t}</span>`).join("");
 
   sessionPopup.style.display = "block";

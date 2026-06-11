@@ -10,59 +10,14 @@
 body {
   font-family: "Montserrat", sans-serif;
   -webkit-font-smoothing: antialiased;
-  background: #f4f6f9;
+  background: #fff;
   color: #111;
-  min-height: 100vh;
 }
-
-/* ── TOP HERO ──────────────────────────────────────────────────────────── */
-.hero {
-  background: linear-gradient(135deg, #122345 0%, #1a3461 60%, #0e6a84 100%);
-  color: white;
-  padding: 48px 24px 40px;
-  text-align: center;
-}
-.hero-eyebrow {
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: #7ecde0;
-  margin-bottom: 10px;
-}
-.hero h1 {
-  font-size: clamp(1.6rem, 4vw, 2.6rem);
-  font-weight: 800;
-  line-height: 1.15;
-  letter-spacing: -0.02em;
-  margin-bottom: 14px;
-}
-.hero-sub {
-  font-size: 1rem;
-  font-weight: 500;
-  opacity: 0.85;
-  max-width: 620px;
-  margin: 0 auto 28px;
-  line-height: 1.6;
-}
-.hero-meta {
-  display: inline-flex;
-  align-items: center;
-  gap: 20px;
-  background: rgba(255,255,255,0.12);
-  border-radius: 50px;
-  padding: 10px 22px;
-  font-size: 0.82rem;
-  font-weight: 600;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-.hero-meta span { opacity: 0.6; }
 
 /* ── STICKY CONTROLS ────────────────────────────────────────────────────── */
 .controls-bar {
   background: #fff;
-  box-shadow: 0 2px 16px rgba(0,0,0,0.09);
+  border-bottom: 1px solid #eaecf0;
   position: sticky;
   top: 0;
   z-index: 100;
@@ -91,39 +46,31 @@ body {
 .tz-select {
   padding: 8px 11px;
   border-radius: 9px;
-  border: none;
-  background: #f4f6f9;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  border: 1.5px solid #e8eaed;
+  background: #fff;
   font-family: "Montserrat", sans-serif;
   font-weight: 500;
   font-size: 0.82rem;
   max-width: 240px;
   cursor: pointer;
+  color: #111;
 }
-.filter-divider { width: 1px; height: 32px; background: #e0e4ea; flex-shrink: 0; }
-.filter-chips {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  align-items: center;
-}
-.filter-chip {
-  border: none;
-  padding: 6px 14px;
+.ctrl-divider { width: 1px; height: 28px; background: #e8eaed; flex-shrink: 0; }
+.filter-toggle {
+  border: 1.5px solid #e8eaed;
+  padding: 7px 16px;
   border-radius: 50px;
-  background: #f4f6f9;
-  color: #444;
+  background: #fff;
   font-family: "Montserrat", sans-serif;
   font-size: 0.75rem;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
+  color: #555;
   transition: all .18s ease;
   white-space: nowrap;
 }
-.filter-chip:hover { background: #e4eaf3; color: #122345; }
-.filter-chip.active { background: #122345; color: #fff; }
-.filter-chip.tag-chip { background: #eef6fb; color: #187089; }
-.filter-chip.tag-chip.active { background: #187089; color: #fff; }
+.filter-toggle:hover { border-color: #122345; color: #122345; }
+.filter-toggle.active { background: #122345; color: #fff; border-color: #122345; }
 
 /* ── MAIN LAYOUT ────────────────────────────────────────────────────────── */
 .main {
@@ -139,6 +86,7 @@ body {
   align-items: baseline;
   gap: 14px;
   margin-bottom: 14px;
+  flex-wrap: wrap;
 }
 .slot-time {
   font-size: 1.05rem;
@@ -175,18 +123,18 @@ body {
 .session-card {
   background: #fff;
   border-radius: 16px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
-  overflow: hidden;
+  border: 1.5px solid #e8eaed;
+  overflow: visible;
   transition: transform .2s ease, box-shadow .2s ease;
   display: flex;
   flex-direction: column;
 }
-.session-card:hover { transform: translateY(-3px); box-shadow: 0 12px 28px rgba(0,0,0,0.12); }
-.session-card.hidden { display: none; }
+.session-card:hover { transform: translateY(-3px); box-shadow: 0 12px 28px rgba(0,0,0,0.09); }
 
 .card-accent {
   height: 5px;
   background: linear-gradient(90deg, #122345, #187089);
+  border-radius: 14px 14px 0 0;
 }
 
 .card-body { padding: 18px 20px 0; flex: 1; }
@@ -204,55 +152,59 @@ body {
   text-transform: uppercase;
   padding: 3px 9px;
   border-radius: 50px;
-  background: #eef4fb;
-  color: #3a6db5;
+  background: #f0f2f5;
+  color: #666;
 }
-.card-tag.green { background: #edf7ed; color: #4a8a4a; }
-.card-tag.teal { background: #edf7fa; color: #187089; }
-.card-tag.purple { background: #f3edf9; color: #7040aa; }
-.card-tag.orange { background: #fef5eb; color: #c07020; }
 
 .card-title {
   font-size: 1.02rem;
   font-weight: 700;
   color: #122345;
   line-height: 1.3;
-  margin-bottom: 10px;
+  margin-bottom: 6px;
+}
+.card-subtitle {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #187089;
+  margin-bottom: 14px;
+  line-height: 1.3;
 }
 
+/* ── SPEAKER ROW ────────────────────────────────────────────────────────── */
 .card-speakers {
   display: flex;
-  flex-direction: column;
-  gap: 4px;
+  gap: 10px;
+  flex-wrap: wrap;
   margin-bottom: 14px;
 }
-.speaker-line {
+.speaker-chip {
   display: flex;
   align-items: center;
   gap: 8px;
+  cursor: default;
+  position: relative;
 }
-.speaker-avatar {
-  width: 28px;
-  height: 28px;
+.speaker-photo {
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #122345, #187089);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.65rem;
-  font-weight: 700;
-  color: white;
+  object-fit: cover;
+  border: 2px solid #e8eaed;
+  background: #e8eaed;
   flex-shrink: 0;
 }
-.speaker-info { font-size: 0.82rem; }
-.speaker-name { font-weight: 700; color: #122345; }
-.speaker-role { color: #666; font-size: 0.75rem; }
+.speaker-name { font-size: 0.82rem; font-weight: 700; color: #122345; }
+.speaker-role { font-size: 0.72rem; color: #888; }
 
+/* ── DESCRIPTION ────────────────────────────────────────────────────────── */
 .card-desc {
   font-size: 0.88rem;
   line-height: 1.6;
   color: #444;
   margin-bottom: 16px;
+}
+.card-desc.clamped {
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
@@ -264,7 +216,6 @@ body {
   padding: 0 20px 18px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
 }
 .expand-btn {
   border: none;
@@ -288,12 +239,10 @@ body {
 }
 .expand-icon.open { transform: rotate(180deg); }
 
-/* ── EXPANDED DETAIL PANEL ──────────────────────────────────────────────── */
+/* ── EXPANDED DETAIL ────────────────────────────────────────────────────── */
 .card-detail {
   display: none;
   padding: 0 20px 22px;
-  border-top: 1px solid #f0f2f5;
-  margin-top: 2px;
 }
 .card-detail.open { display: block; }
 
@@ -301,8 +250,8 @@ body {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
-  margin-top: 16px;
-  margin-bottom: 20px;
+  margin-top: 4px;
+  margin-bottom: 8px;
 }
 @media (max-width: 560px) { .objectives-grid { grid-template-columns: 1fr; } }
 
@@ -358,67 +307,6 @@ body {
   top: 1px;
 }
 
-/* ── SPEAKER BIO SECTION ────────────────────────────────────────────────── */
-.bio-section { margin-top: 4px; }
-.bio-section-title {
-  font-size: 0.7rem;
-  font-weight: 800;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: #122345;
-  margin-bottom: 12px;
-}
-.bio-card {
-  background: linear-gradient(90deg, rgba(18,35,69,0.04) 0%, rgba(255,255,255,0) 40%);
-  border-left: 3px solid #122345;
-  border-radius: 0 10px 10px 0;
-  padding: 12px 14px;
-  margin-bottom: 10px;
-}
-.bio-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 8px;
-}
-.bio-avatar {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #122345, #187089);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: white;
-  flex-shrink: 0;
-}
-.bio-name { font-size: 0.88rem; font-weight: 700; color: #122345; }
-.bio-title-org { font-size: 0.75rem; color: #666; }
-.bio-text {
-  font-size: 0.79rem;
-  line-height: 1.55;
-  color: #444;
-  display: -webkit-box;
-  -webkit-line-clamp: 4;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  transition: all .3s ease;
-}
-.bio-text.expanded { -webkit-line-clamp: unset; }
-.bio-toggle {
-  border: none;
-  background: none;
-  font-family: "Montserrat", sans-serif;
-  font-size: 0.72rem;
-  font-weight: 700;
-  color: #187089;
-  cursor: pointer;
-  margin-top: 5px;
-  padding: 0;
-}
-
 /* ── EMPTY STATE ────────────────────────────────────────────────────────── */
 .empty-state {
   text-align: center;
@@ -427,17 +315,12 @@ body {
   display: none;
 }
 .empty-state.visible { display: block; }
-.empty-state-icon { font-size: 2.5rem; margin-bottom: 12px; }
 .empty-state p { font-size: 0.95rem; font-weight: 600; }
-
-/* ── TIME CATEGORY STRIP ────────────────────────────────────────────────── */
-.slot-section.evening .slot-time { color: #187089; }
-.slot-section.neutral .slot-time { color: #666; }
 
 /* ── RESPONSIVE ─────────────────────────────────────────────────────────── */
 @media (max-width: 700px) {
   .controls-inner { flex-direction: column; align-items: flex-start; }
-  .filter-divider { display: none; }
+  .ctrl-divider { display: none; }
   .session-grid { grid-template-columns: 1fr; }
   .objectives-grid { grid-template-columns: 1fr; }
   .tz-select { max-width: 100%; width: 100%; }
@@ -446,22 +329,6 @@ body {
 </head>
 <body>
 
-<!-- HERO -->
-<div class="hero">
-  <div class="hero-eyebrow">A Global Gathering for the Future of Child Welfare</div>
-  <h1>Skill Building Institutes</h1>
-  <p class="hero-sub">Immersive, hands-on learning experiences led by practitioners and thought leaders from around the world. Build real skills you can apply the very next day.</p>
-  <div class="hero-meta">
-    <strong>Tuesday, October 6, 2026</strong>
-    <span>|</span>
-    <span>Virtual</span>
-    <span>|</span>
-    <span>3.5-hour deep dives</span>
-    <span>|</span>
-    <span>11 sessions</span>
-  </div>
-</div>
-
 <!-- STICKY CONTROLS -->
 <div class="controls-bar">
   <div class="controls-inner">
@@ -469,30 +336,34 @@ body {
       <span class="tz-label">Time zone</span>
       <select class="tz-select" id="timezoneSelect"></select>
     </div>
-    <div class="filter-divider"></div>
-    <div class="filter-chips" id="filterChips">
-      <button class="filter-chip active" data-filter="all">All sessions</button>
-      <button class="filter-chip" data-filter="daytime">Daytime hours</button>
-      <button class="filter-chip" data-filter="evening">Evening hours</button>
-      <div class="filter-divider" style="height:20px;"></div>
-      <button class="filter-chip tag-chip" data-tag="leadership">Leadership</button>
-      <button class="filter-chip tag-chip" data-tag="lived-experience">Lived Experience</button>
-      <button class="filter-chip tag-chip" data-tag="facilitation">Facilitation</button>
-      <button class="filter-chip tag-chip" data-tag="family-engagement">Family Engagement</button>
-      <button class="filter-chip tag-chip" data-tag="foster-care">Foster Care</button>
-    </div>
+    <div class="ctrl-divider"></div>
+    <button class="filter-toggle" id="filterDayEve">Daytime &amp; Evening Hours</button>
   </div>
 </div>
 
 <!-- MAIN CONTENT -->
 <div class="main" id="mainContent"></div>
 <div class="empty-state" id="emptyState">
-  <div class="empty-state-icon">🔍</div>
-  <p>No sessions match your current filters.</p>
+  <p>No sessions match the current filter.</p>
+</div>
+
+<!-- GLOBAL SPEAKER TOOLTIP -->
+<div id="globalTooltip" style="display:none;position:fixed;z-index:9999;pointer-events:none;width:270px;">
+  <div style="background:#fff;border:1.5px solid #e8eaed;border-radius:12px;padding:14px;box-shadow:0 8px 28px rgba(0,0,0,0.15);">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+      <img id="ttPhoto" src="" alt="" style="width:48px;height:48px;border-radius:50%;object-fit:cover;border:2px solid #e8eaed;background:#e8eaed;flex-shrink:0;">
+      <div>
+        <div id="ttName" style="font-size:0.88rem;font-weight:700;color:#122345;line-height:1.2;"></div>
+        <div id="ttTitle" style="font-size:0.72rem;color:#187089;font-weight:600;margin-top:2px;"></div>
+        <div id="ttOrg" style="font-size:0.7rem;color:#888;margin-top:1px;"></div>
+      </div>
+    </div>
+    <div id="ttBio" style="font-size:0.75rem;line-height:1.5;color:#444;border-top:1px solid #f0f2f5;padding-top:8px;"></div>
+  </div>
 </div>
 
 <script>
-// ─── TIMEZONE SETUP (copied from skeleton widget) ──────────────────────────
+// ─── TIMEZONE SETUP ────────────────────────────────────────────────────────
 const tzMap = {
   "America/New_York":"EDT","America/Chicago":"CDT","America/Denver":"MDT",
   "America/Los_Angeles":"PDT","America/Anchorage":"AKDT","America/Phoenix":"MST",
@@ -608,8 +479,10 @@ function buildTimeLabel(sUtc, eUtc, tz) {
   return `${s} – ${e}`;
 }
 
+// ─── CDN BASE ──────────────────────────────────────────────────────────────
+const CDN = "https://custom.cvent.com/AE944F71438646268B70FF5BF3772347/files/event/e7d15afcf2b14901ab0272ce8a401899/";
+
 // ─── SESSION DATA ──────────────────────────────────────────────────────────
-// All start/end times in Eastern (EDT = UTC−4, Oct 2026)
 const sessions = [
   {
     code: "FAMI4876",
@@ -617,66 +490,16 @@ const sessions = [
     endDate:"2026-10-06",   endTime:"09:30",
     title: "Family Group Decision Making",
     subtitle: "Practice Skills for Social Workers and Coordinators",
-    tags: ["facilitation","family-engagement","child-voice"],
-    tagLabels: [
-      {text:"Facilitation",cls:"teal"},
-      {text:"Family Engagement",cls:"green"},
-      {text:"Child Voice",cls:"blue"}
-    ],
-    description: "This highly interactive Skill Building Institute focuses on the practice skills and facilitation processes that strengthen effective Family Group Decision Making (FGDM). Participants will explore key stages of the FGDM process, including negotiating referrals, preparing families and agencies, developing bottom lines, supporting advocacy, enhancing the child's voice, managing conflict, facilitating conferences, and developing meaningful plans and reviews.",
+    tagLabels: ["Facilitation","Family Engagement","Child Voice"],
+    description: "This Skill Building Institute will focus on practice skills and processes for facilitating and contributing to FGDM. It will include negotiating referrals for FGDM, creating 'bottom lines', preparing family and agencies for the FGDM, advocacy skills, dealing with conflict, enhancing the child's voice in the process, running the conference, presenting information in helpful ways and agreeing plans and reviews.",
     objectives: {
-      why: {
-        label:"Foundational Knowledge",
-        sub:"Understanding the Why",
-        cls:"",
-        items:[
-          "Describe the core values, purposes, and practice foundations of FGDM.",
-          "Explain the role of FGDM in strengthening family engagement and collaborative planning.",
-          "Identify the responsibilities and distinct roles of social workers, coordinators, families, and agency representatives.",
-          "Recognize common barriers, tensions, and challenges in family-led decision-making."
-        ]
-      },
-      how: {
-        label:"Core Concepts",
-        sub:"Understanding the How",
-        cls:"teal",
-        items:[
-          "Describe effective approaches for negotiating referrals and establishing meaningful 'bottom lines.'",
-          "Examine strategies for preparing families, children, and agencies for FGDM.",
-          "Explore approaches for enhancing the child's voice and participation.",
-          "Identify facilitation strategies that support engagement, collaboration, and transparency."
-        ]
-      },
-      practice: {
-        label:"Skill Development",
-        sub:"Applied Practice",
-        cls:"green",
-        items:[
-          "Practice negotiating and clarifying referrals for FGDM processes.",
-          "Develop skills for creating effective bottom lines that balance safety and family leadership.",
-          "Practice responding to conflict, tension, and emotionally charged situations.",
-          "Develop approaches for supporting collaborative planning and review processes."
-        ]
-      },
-      transfer: {
-        label:"Workplace Application",
-        sub:"Transfer to Practice",
-        cls:"purple",
-        items:[
-          "Apply facilitation and preparation strategies within your own practice settings.",
-          "Identify opportunities to enhance family participation and child voice.",
-          "Integrate practical FGDM tools into everyday social work and coordination practice."
-        ]
-      }
+      why:      {label:"Foundational Knowledge",sub:"Understanding the Why",cls:"",items:["Describe the core values, purposes, and practice foundations of FGDM.","Explain the role of FGDM in strengthening family engagement and collaborative planning.","Identify the responsibilities and distinct roles of social workers, coordinators, families, and agency representatives.","Recognize common barriers, tensions, and challenges in family-led decision-making."]},
+      how:      {label:"Core Concepts",sub:"Understanding the How",cls:"teal",items:["Describe effective approaches for negotiating referrals and establishing meaningful 'bottom lines.'","Examine strategies for preparing families, children, and agencies for FGDM.","Explore approaches for enhancing the child's voice and participation.","Identify facilitation strategies that support engagement, collaboration, and transparency."]},
+      practice: {label:"Skill Development",sub:"Applied Practice",cls:"green",items:["Practice negotiating and clarifying referrals for FGDM processes.","Develop skills for creating effective bottom lines that balance safety and family leadership.","Practice responding to conflict, tension, and emotionally charged situations.","Develop approaches for supporting collaborative planning and review processes."]},
+      transfer: {label:"Workplace Application",sub:"Transfer to Practice",cls:"purple",items:["Apply facilitation and preparation strategies within your own practice settings.","Identify opportunities to enhance family participation and child voice.","Integrate practical FGDM tools into everyday social work and coordination practice."]}
     },
     speakers: [
-      {
-        name:"Paul Nixon",
-        title:"Specialist, Relational Practice and Leadership",
-        org:"",
-        initials:"PN",
-        bio:"Paul Nixon is a practitioner, consultant, and educator specializing in relational practice, leadership, and family group decision making with extensive international experience across child welfare systems."
-      }
+      {name:"Paul Nixon",title:"Independent Social Worker & International Consultant",org:"Edinburgh, Scotland",bio:"International expert with 34+ years in child protection, Family Group Conferences, and leadership; former Chief Social Worker for the Government of New Zealand. Consults with governments, NGOs, and universities across six continents.",photo:CDN+"c85b4588d3f04f03af1ff97dcf7c5214.png"}
     ]
   },
   {
@@ -685,65 +508,16 @@ const sessions = [
     endDate:"2026-10-06",   endTime:"13:30",
     title: "Amplifying Unheard Voices",
     subtitle: "Practical Skills for Power-Sharing and Lived Expertise in Child Welfare",
-    tags: ["lived-experience","facilitation","family-engagement"],
-    tagLabels: [
-      {text:"Lived Experience",cls:"purple"},
-      {text:"Facilitation",cls:"teal"},
-      {text:"Power-Sharing",cls:"blue"}
-    ],
-    description: "How do we create conditions where people whose voices are often overlooked can speak, be listened to, and genuinely influence what happens next? This immersive Skill Institute equips participants with practical, repeatable facilitation moves for shifting from 'professional discourse' to shared dialogue that centres lived experience. Using short demonstrations, guided practice, and peer feedback, participants will rehearse ways to build trust, reduce defensiveness, and address power dynamics in real time—without losing clarity, safety, or purpose.",
+    tagLabels: ["Lived Experience","Facilitation","Power-Sharing"],
+    description: "How do we create conditions where people whose voices are often overlooked can speak, be listened to, and genuinely influence what happens next? This immersive Skill Building Institute equips participants with practical, repeatable facilitation moves for shifting from \"professional discourse\" to shared dialogue that centres lived experience. Using short demonstrations, guided practice, and peer feedback, participants will rehearse ways to build trust, reduce defensiveness, and address power dynamics in real time—without losing clarity, safety, or purpose.",
     objectives: {
-      why: {
-        label:"Foundational Knowledge",
-        sub:"Understanding the Why",
-        cls:"",
-        items:[
-          "Understand why lived expertise must genuinely shape decisions, not just be 'heard.'",
-          "Recognise the dynamics that cause professional discourse to crowd out community voices.",
-          "Identify the conditions needed for psychological safety and shared power in mixed spaces."
-        ]
-      },
-      how: {
-        label:"Core Concepts",
-        sub:"Understanding the How",
-        cls:"teal",
-        items:[
-          "Facilitate power-sharing dialogue in mixed professional/community spaces.",
-          "Use listening moves that deepen meaning without interrogating or extracting.",
-          "Surface what's not being said and invite it in safely.",
-          "Apply a co-creation structure that turns stories into shared next steps."
-        ]
-      },
-      practice: {
-        label:"Skill Development",
-        sub:"Applied Practice",
-        cls:"green",
-        items:[
-          "Practise a short 'opening + invitation' script that signals psychological safety.",
-          "Rehearse listening moves that deepen meaning without interrogating.",
-          "Practice ways to surface what's not being said.",
-          "Apply a co-creation template turning lived experience into decisions and follow-through."
-        ]
-      },
-      transfer: {
-        label:"Workplace Application",
-        sub:"Transfer to Practice",
-        cls:"purple",
-        items:[
-          "Leave with a 1-page facilitation prompts sheet (openings, invitations, power-aware questions).",
-          "Use a 'who's missing / whose knowledge is missing?' checklist.",
-          "Apply a simple co-creation template across your own professional contexts."
-        ]
-      }
+      why:      {label:"Foundational Knowledge",sub:"Understanding the Why",cls:"",items:["Understand why lived expertise must genuinely shape decisions, not just be 'heard.'","Recognise the dynamics that cause professional discourse to crowd out community voices.","Identify the conditions needed for psychological safety and shared power in mixed spaces."]},
+      how:      {label:"Core Concepts",sub:"Understanding the How",cls:"teal",items:["Facilitate power-sharing dialogue in mixed professional/community spaces.","Use listening moves that deepen meaning without interrogating or extracting.","Surface what's not being said and invite it in safely.","Apply a co-creation structure that turns stories into shared next steps."]},
+      practice: {label:"Skill Development",sub:"Applied Practice",cls:"green",items:["Practise a short 'opening + invitation' script that signals psychological safety.","Rehearse listening moves that deepen meaning without interrogating.","Practice ways to surface what's not being said.","Apply a co-creation template turning lived experience into decisions and follow-through."]},
+      transfer: {label:"Workplace Application",sub:"Transfer to Practice",cls:"purple",items:["Leave with a 1-page facilitation prompts sheet (openings, invitations, power-aware questions).","Use a 'who's missing / whose knowledge is missing?' checklist.","Apply a simple co-creation template across your own professional contexts."]}
     },
     speakers: [
-      {
-        name:"Sharon Inglis",
-        title:"Director",
-        org:"Circles Training & Consultancy Ltd",
-        initials:"SI",
-        bio:"Sharon Inglis is Director of Circles Training and Consultancy Ltd, a UK-based organisation specialising in immersive, practice-based training in facilitation, power-sharing, and family-led processes. She brings extensive experience training practitioners internationally in the skills needed to genuinely centre lived experience in professional decision-making."
-      }
+      {name:"Sharon Inglis",title:"Director",org:"Circles Training & Consultancy",bio:"25+ years specializing in family group conferences and restorative approaches. Supports children's services in making the shift from procedural practice to true partnership.",photo:CDN+"fb537cda9e16421abe5e3946c5057638.jpg"}
     ]
   },
   {
@@ -751,69 +525,18 @@ const sessions = [
     startDate:"2026-10-06", startTime:"10:00",
     endDate:"2026-10-06",   endTime:"13:30",
     title: "The Space Between Intention and Impact",
-    subtitle: "A Full-Day Professional Dangerousness Training",
-    tags: ["leadership","lived-experience","facilitation"],
-    tagLabels: [
-      {text:"Professional Development",cls:"blue"},
-      {text:"Reflection",cls:"teal"},
-      {text:"Team Practice",cls:"green"}
-    ],
-    description: "This interactive Skill Development Institute explores Professional Dangerousness (PD) through reflection, storytelling, research-informed insight, and real-world examples drawn from human services practice. Using the Self+ framework—Awareness, Reflection, Compassion, Care, and Growth—attendees will identify practical, human-centered strategies that strengthen reflection, communication, resilience, and everyday practice across complex systems.",
+    subtitle: "A Professional Dangerousness Training",
+    tagLabels: ["Professional Development","Reflection","Team Practice"],
+    description: "There is a quiet undercurrent in human services work—a tension between our best intentions and the impact that actually unfolds. It's the weight we carry. The moments when something doesn't quite land, but we haven't had the language to describe why…until now. In this interactive Skill Building Institute, we explore how Professional Dangerousness (PD) can quietly shape the way we show up for the people we serve. Through reflection, storytelling, research-informed insight, and moments of humor, participants will name the invisible patterns that influence everyday practice—and leave with a practical framework and concrete strategies to carry back into their work.",
     objectives: {
-      why: {
-        label:"Foundational Knowledge",
-        sub:"Understanding the Why",
-        cls:"",
-        items:[
-          "Define Professional Dangerousness (PD) and identify examples of how it emerges in practice.",
-          "Explain why recognition of PD matters across human services.",
-          "Discuss the potential impact of PD on client relationships, service delivery, and system outcomes."
-        ]
-      },
-      how: {
-        label:"Core Concepts",
-        sub:"Understanding the How",
-        cls:"teal",
-        items:[
-          "Recognise conditions and contributing factors that allow PD to manifest.",
-          "Examine how PD surfaces at individual, team, organizational, and systemic levels."
-        ]
-      },
-      practice: {
-        label:"Skill Development",
-        sub:"Applied Practice",
-        cls:"green",
-        items:[
-          "Reflect on your own professional experiences to recognise where PD may have occurred.",
-          "Practice recognising and interrupting patterns that contribute to personal PD."
-        ]
-      },
-      transfer: {
-        label:"Workplace Application",
-        sub:"Transfer to Practice",
-        cls:"purple",
-        items:[
-          "Apply the Self+ framework to identify actionable strategies for reducing PD in day-to-day work.",
-          "Integrate reflection, compassion, and awareness into everyday professional decision-making.",
-          "Recognise opportunities to strengthen organizational culture through greater awareness of PD dynamics."
-        ]
-      }
+      why:      {label:"Foundational Knowledge",sub:"Understanding the Why",cls:"",items:["Define Professional Dangerousness (PD) and identify examples of how it emerges in practice.","Explain why recognition of PD matters across human services.","Discuss the potential impact of PD on client relationships, service delivery, and system outcomes."]},
+      how:      {label:"Core Concepts",sub:"Understanding the How",cls:"teal",items:["Recognise conditions and contributing factors that allow PD to manifest.","Examine how PD surfaces at individual, team, organizational, and systemic levels."]},
+      practice: {label:"Skill Development",sub:"Applied Practice",cls:"green",items:["Reflect on your own professional experiences to recognise where PD may have occurred.","Practice recognising and interrupting patterns that contribute to personal PD."]},
+      transfer: {label:"Workplace Application",sub:"Transfer to Practice",cls:"purple",items:["Apply the Self+ framework to identify actionable strategies for reducing PD in day-to-day work.","Integrate reflection, compassion, and awareness into everyday professional decision-making.","Recognise opportunities to strengthen organizational culture through greater awareness of PD dynamics."]}
     },
     speakers: [
-      {
-        name:"Brëanna McMullen",
-        title:"Speaker, Trainer, Reflective Coach & Consultant",
-        org:"McMullen Consulting, LLC",
-        initials:"BM",
-        bio:"Brëanna McMullen is a co-founder of the Professional Dangerousness (PD) Collective. With backgrounds in human services, reflective consultation, leadership, and research, she creates an engaging, relational space where participants feel safe to explore complex and vulnerable topics. Her co-facilitated style blends shared storytelling, practice-based examples, research-informed insight, and reflective invitations."
-      },
-      {
-        name:"Jess Hoeper",
-        title:"Consultant, Reflective Practice Coach & Trainer",
-        org:"Ray of HOPE, LLC",
-        initials:"JH",
-        bio:"Jessica Hoeper is a co-founder of the Professional Dangerousness (PD) Collective. She brings extensive experience presenting to diverse audiences across systems and disciplines, with expertise in reflective consultation, leadership, and research."
-      }
+      {name:"Brëanna McMullen",title:"Speaker · Trainer · Reflective Coach & Consultant",org:"McMullen Consulting, LLC",bio:"Co-founder of the PD Collective alongside Jessica Hoeper, guiding communities in recognizing and transforming Professional Dangerousness through humor, compassion, and sustainable change.",photo:CDN+"5accc76ba6ec49db8182e06fc9c81347.png"},
+      {name:"Jess Hoeper",title:"Consultant · Reflective Practice Coach · Trainer",org:"Ray of HOPE, LLC",bio:"Co-founder of the PD Collective, bringing lived experience and reflective consultation to training on Professional Dangerousness. Creates honest, actionable learning spaces rooted in human services practice.",photo:CDN+"5accc76ba6ec49db8182e06fc9c81347.png"}
     ]
   },
   {
@@ -822,79 +545,18 @@ const sessions = [
     endDate:"2026-10-06",   endTime:"15:30",
     title: "Curiosity Is Key",
     subtitle: "Leading Change in a Compliance Driven Culture",
-    tags: ["leadership","facilitation"],
-    tagLabels: [
-      {text:"Leadership",cls:"blue"},
-      {text:"Coaching",cls:"teal"},
-      {text:"Systems Change",cls:"orange"}
-    ],
-    description: "What if the most powerful thing a child welfare leader could do was stop going to solution and start getting curious? This Skill Building Institute is an immersive, practice-based introduction to the Coach Approach to Adaptive Leadership—a framework that builds the skills, mindset, and relational practices that drive real system change. Drawing from multiple state implementations, including South Carolina where a coaching culture contributed to 92–93% retention across 4,500 staff.",
+    tagLabels: ["Leadership","Coaching","Systems Change"],
+    description: "What if the most powerful thing a child welfare leader could do was learn to stop going to solution — and start getting curious? This Skill Building Institute is an immersive, practice-based introduction to the Coach Approach to Adaptive Leadership: a framework that builds the skills, mindset, and relational practices that drive real system change. Through self-assessment, coached dilemma exercises, engaged listening practice, and values exploration, participants don't just learn about coaching—they experience it. Drawing from multiple state implementations, including South Carolina where a coaching culture contributed to 92–93% retention across 4,500 staff, this session demonstrates that curiosity isn't soft—it's a system-change strategy.",
     objectives: {
-      why: {
-        label:"Foundational Knowledge",
-        sub:"Understanding the Why",
-        cls:"",
-        items:[
-          "Describe the paradox child welfare leaders face: environments demanding fast answers while challenges are adaptive.",
-          "Explain why workforce burnout, turnover, and erosion of trust resist technical fixes alone.",
-          "Describe the Coach Approach to Adaptive Leadership as a practical framework.",
-          "Recognise curiosity as a system-change strategy in compliance-heavy environments."
-        ]
-      },
-      how: {
-        label:"Core Concepts",
-        sub:"Understanding the How",
-        cls:"teal",
-        items:[
-          "Identify core Coach Approach skills: engaged listening, powerful inquiry, values-based decision-making.",
-          "Describe the inside-out orientation: building internal capacity to show up differently in the same structure.",
-          "Distinguish managing compliance from leading change in systems of care.",
-          "Explore how relational trust and psychological safety support adaptive leadership."
-        ]
-      },
-      practice: {
-        label:"Skill Development",
-        sub:"Applied Practice",
-        cls:"green",
-        items:[
-          "Participate in self-assessment, coached dilemma exercises, engaged listening practice, and values exploration.",
-          "Practice asking better questions and staying curious before moving to solution.",
-          "Apply the Coach Approach to an adaptive challenge through small-group practice."
-        ]
-      },
-      transfer: {
-        label:"Workplace Application",
-        sub:"Transfer to Practice",
-        cls:"purple",
-        items:[
-          "Identify one adaptive challenge in your own system and apply curiosity to it.",
-          "Use Coach Approach skills in supervision sessions, team meetings, and daily leadership.",
-          "Apply curiosity, engaged listening, and values-based decision-making as practical leadership tools."
-        ]
-      }
+      why:      {label:"Foundational Knowledge",sub:"Understanding the Why",cls:"",items:["Describe the paradox child welfare leaders face: environments demanding fast answers while challenges are adaptive.","Explain why workforce burnout, turnover, and erosion of trust resist technical fixes alone.","Describe the Coach Approach to Adaptive Leadership as a practical framework.","Recognise curiosity as a system-change strategy in compliance-heavy environments."]},
+      how:      {label:"Core Concepts",sub:"Understanding the How",cls:"teal",items:["Identify core Coach Approach skills: engaged listening, powerful inquiry, values-based decision-making.","Describe the inside-out orientation: building internal capacity to show up differently in the same structure.","Distinguish managing compliance from leading change in systems of care.","Explore how relational trust and psychological safety support adaptive leadership."]},
+      practice: {label:"Skill Development",sub:"Applied Practice",cls:"green",items:["Participate in self-assessment, coached dilemma exercises, engaged listening practice, and values exploration.","Practice asking better questions and staying curious before moving to solution.","Apply the Coach Approach to an adaptive challenge through small-group practice."]},
+      transfer: {label:"Workplace Application",sub:"Transfer to Practice",cls:"purple",items:["Identify one adaptive challenge in your own system and apply curiosity to it.","Use Coach Approach skills in supervision sessions, team meetings, and daily leadership.","Apply curiosity, engaged listening, and values-based decision-making as practical leadership tools."]}
     },
     speakers: [
-      {
-        name:"Mark Durgin",
-        title:"National Coordinator",
-        org:"Kagen Leadership Group",
-        initials:"MD",
-        bio:"Mark B. Durgin is an accomplished leader with over two decades of experience transforming organizations through strategic leadership. His expertise is rooted in human services, including leading a $23M grant initiative to transform behavioral health systems. A passionate advocate for adaptive leadership, he has guided over 2,500 professionals in cross-sector communication and systemic problem-solving. Mark holds a BS in Criminal Justice and is an Associate Certified Coach (ACC) through the International Coaching Federation."
-      },
-      {
-        name:"Ellen Kagen",
-        title:"Principal",
-        org:"Kagen Leadership Group",
-        initials:"EK",
-        bio:"Ellen B. Kagen is an Assistant Professor at Georgetown University and founder of the Georgetown Leadership Academy, a national leadership learning and consultation effort for professionals, families, and youth in human services, health, and education. She has adapted her curriculum for nonprofits, foundations, universities, and child welfare networks across over 30 states. She holds an MSW from the University of Maryland with leadership training from Harvard's Kennedy School."
-      },
-      {
-        name:"Barb Putnam",
-        title:"Associate",
-        org:"Kagen Leadership Group",
-        initials:"BP",
-        bio:"Barb has been a leader in Washington State's System of Care since 1987, advancing programs across child-serving systems. She has designed wraparound services, led training for parents and professionals, and is a certified trainer in the Coach Approach for Adaptive Leadership through the Kagen Leadership Group."
-      }
+      {name:"Mark Durgin",title:"National Coordinator",org:"Kagen Leadership Group",bio:"20+ years transforming organizations through adaptive leadership coaching, including a $23M behavioral health systems initiative. Has guided 2,500+ professionals in cross-sector communication and systemic problem-solving.",photo:CDN+"1911c1220e974a53a533087beb213e95.png"},
+      {name:"Ellen Kagen",title:"Assistant Professor; Founder, Georgetown Leadership Academy",org:"Kagen Leadership Group / Georgetown University",bio:"Creator of the Transformation Facilitation coaching model with curriculum adapted across 30+ states covering Adaptive Leadership, Cultural Competence, and Systems Change.",photo:CDN+"a9768e31b09a4054839a72b5dbce699d.png"},
+      {name:"Barb Putnam",title:"Associate · BASW, MSW, LICSW, CMHS",org:"Kagen Leadership Group",bio:"Leader in Washington State's System of Care since 1987, spanning community mental health and statewide children's services. Certified Coach Approach for Adaptive Leadership trainer.",photo:CDN+"92a9464813d54b3189fc61fa94b2ff0e.jpg"}
     ]
   },
   {
@@ -903,63 +565,16 @@ const sessions = [
     endDate:"2026-10-06",   endTime:"15:30",
     title: "From Engagement to Power",
     subtitle: "Practicing Ethical, Lived-Experience-Led Change",
-    tags: ["lived-experience","leadership","family-engagement"],
-    tagLabels: [
-      {text:"Lived Experience",cls:"purple"},
-      {text:"Ethical Practice",cls:"teal"},
-      {text:"Systems Change",cls:"orange"}
-    ],
-    description: "Across child welfare, family defense, prevention, and family well-being efforts, engagement is often named as a priority—yet many strategies unintentionally recreate the same dynamics families experience as harmful. This highly interactive Skill Institute moves beyond theory into practice. Through guided simulations, reflection activities, and real-world application, participants will explore how power, consent, credibility, and decision-making show up in engagement efforts.",
+    tagLabels: ["Lived Experience","Ethical Practice","Systems Change"],
+    description: "This highly interactive Skill Building Institute moves beyond theory and into practice. Through guided simulations, reflection activities, and real-world application, participants will explore how power, consent, credibility, and decision-making show up in engagement efforts. Together, we will examine common engagement practices, identify where systems harm can unintentionally re-emerge, and practice alternative approaches grounded in ethical engagement, shared authority, and lived experience leadership.",
     objectives: {
-      why: {
-        label:"Foundational Knowledge",
-        sub:"Understanding the Why",
-        cls:"",
-        items:[
-          "Identify ways systems harm can be unintentionally replicated through engagement efforts.",
-          "Recognise why well-intentioned strategies can recreate harmful dynamics for families and youth.",
-          "Describe the importance of moving beyond engagement as a stated priority toward ethical, lived-experience-led change."
-        ]
-      },
-      how: {
-        label:"Core Concepts",
-        sub:"Understanding the How",
-        cls:"teal",
-        items:[
-          "Recognise how power, consent, credibility, and authority influence participation.",
-          "Examine common engagement practices and identify where systems harm can re-emerge.",
-          "Describe approaches grounded in ethical engagement, shared authority, and lived experience leadership."
-        ]
-      },
-      practice: {
-        label:"Skill Development",
-        sub:"Applied Practice",
-        cls:"green",
-        items:[
-          "Practice ethical engagement approaches through guided exercises and simulations.",
-          "Use reflection activities and real-world application to examine and redesign engagement practices.",
-          "Practice alternative approaches grounded in shared authority and lived experience leadership."
-        ]
-      },
-      transfer: {
-        label:"Workplace Application",
-        sub:"Transfer to Practice",
-        cls:"purple",
-        items:[
-          "Develop strategies for moving from consultation toward authentic co-creation and shared decision-making.",
-          "Create an action plan for applying ethical engagement principles within your own work.",
-          "Apply practical tools, frameworks, and strategies within organizations, communities, and systems change initiatives."
-        ]
-      }
+      why:      {label:"Foundational Knowledge",sub:"Understanding the Why",cls:"",items:["Identify ways systems harm can be unintentionally replicated through engagement efforts.","Recognise why well-intentioned strategies can recreate harmful dynamics for families and youth.","Describe the importance of moving beyond engagement as a stated priority toward ethical, lived-experience-led change."]},
+      how:      {label:"Core Concepts",sub:"Understanding the How",cls:"teal",items:["Recognise how power, consent, credibility, and authority influence participation.","Examine common engagement practices and identify where systems harm can re-emerge.","Describe approaches grounded in ethical engagement, shared authority, and lived experience leadership."]},
+      practice: {label:"Skill Development",sub:"Applied Practice",cls:"green",items:["Practice ethical engagement approaches through guided exercises and simulations.","Use reflection activities and real-world application to examine and redesign engagement practices.","Practice alternative approaches grounded in shared authority and lived experience leadership."]},
+      transfer: {label:"Workplace Application",sub:"Transfer to Practice",cls:"purple",items:["Develop strategies for moving from consultation toward authentic co-creation and shared decision-making.","Create an action plan for applying ethical engagement principles within your own work.","Apply practical tools, frameworks, and strategies within organizations, communities, and systems change initiatives."]}
     },
     speakers: [
-      {
-        name:"Valerie Frost",
-        title:"Ethical Engagement Strategist",
-        org:"",
-        initials:"VF",
-        bio:"Valerie Frost is an Ethical Engagement Strategist and creator of frameworks for lived-experience-led change in child welfare and family well-being systems. Her work centers on moving systems beyond performative engagement toward genuine co-creation, shared authority, and ethical practice."
-      }
+      {name:"Valerie Frost",title:"Speaker, Trainer & Advocate",org:"",bio:"Dynamic trainer and advocate with firsthand experience navigating child welfare as a parent and a decade in early childhood education. Believes gaps in well-being are opportunities for support — not risks.",photo:CDN+"606d3b0edcdc4e16a02afda9d4ea3e23.jpg"}
     ]
   },
   {
@@ -968,66 +583,16 @@ const sessions = [
     endDate:"2026-10-06",   endTime:"15:30",
     title: "The Weight of the Gold Standard",
     subtitle: "Navigating the Intricacies of Kinship Care with Relational Intelligence",
-    tags: ["foster-care","family-engagement"],
-    tagLabels: [
-      {text:"Kinship Care",cls:"orange"},
-      {text:"Trauma-Informed",cls:"teal"},
-      {text:"Relational Intelligence",cls:"purple"}
-    ],
-    description: "We start with a difficult truth: child welfare engagement is rarely the origin of family trauma, and kinship care is not a guaranteed remedy. Without intentional, trauma-informed intervention, intergenerational wounds persist. This session provides delegates with the tools to identify the hidden pitfalls of kinship care and outlines a framework for supporting families as they choose the courageous, often grueling path toward breaking cycles of harm.",
+    tagLabels: ["Kinship Care","Trauma-Informed","Relational Intelligence"],
+    description: "In this intensive Skill Building Institute, we will examine the critical intersection of policy and family psychology. We start with a difficult truth: child welfare engagement is rarely the origin of family trauma, and kinship care is not a guaranteed remedy. Without intentional, trauma-informed intervention, intergenerational wounds persist. This session provides attendees with the tools to identify the hidden pitfalls of kinship care and outlines a framework for supporting families as they choose the courageous, often grueling path toward breaking cycles of harm.",
     objectives: {
-      why: {
-        label:"Foundational Knowledge",
-        sub:"Understanding the Why",
-        cls:"",
-        items:[
-          "Explain why child welfare involvement is often layered onto pre-existing intergenerational trauma.",
-          "Describe the emotional, relational, and systemic complexities within kinship care arrangements.",
-          "Identify common assumptions and misconceptions surrounding kinship care.",
-          "Recognise how unresolved family dynamics and historical trauma can influence kinship placements."
-        ]
-      },
-      how: {
-        label:"Core Concepts",
-        sub:"Understanding the How",
-        cls:"teal",
-        items:[
-          "Define relational intelligence and its role in navigating complex family systems.",
-          "Describe how trauma-informed approaches can support healthier relational patterns.",
-          "Examine the intersection between policy expectations and the lived emotional realities of kinship caregivers.",
-          "Explore how family narratives and attachment patterns shape caregiving relationships."
-        ]
-      },
-      practice: {
-        label:"Skill Development",
-        sub:"Applied Practice",
-        cls:"green",
-        items:[
-          "Apply relational intelligence strategies when engaging with kinship caregivers and extended family systems.",
-          "Identify signs of relational strain, trauma activation, and unaddressed family conflict.",
-          "Practice approaches for navigating difficult conversations and competing loyalties.",
-          "Utilise trauma-informed communication techniques that strengthen trust and collaborative problem-solving."
-        ]
-      },
-      transfer: {
-        label:"Workplace Application",
-        sub:"Transfer to Practice",
-        cls:"purple",
-        items:[
-          "Identify opportunities to integrate relationally informed, trauma-responsive approaches into kinship care practice.",
-          "Develop strategies to better support kinship caregivers navigating emotional exhaustion and system pressures.",
-          "Create an individualized action plan for strengthening relational intelligence within your own role."
-        ]
-      }
+      why:      {label:"Foundational Knowledge",sub:"Understanding the Why",cls:"",items:["Explain why child welfare involvement is often layered onto pre-existing intergenerational trauma.","Describe the emotional, relational, and systemic complexities within kinship care arrangements.","Identify common assumptions and misconceptions surrounding kinship care.","Recognise how unresolved family dynamics and historical trauma can influence kinship placements."]},
+      how:      {label:"Core Concepts",sub:"Understanding the How",cls:"teal",items:["Define relational intelligence and its role in navigating complex family systems.","Describe how trauma-informed approaches can support healthier relational patterns.","Examine the intersection between policy expectations and the lived emotional realities of kinship caregivers.","Explore how family narratives and attachment patterns shape caregiving relationships."]},
+      practice: {label:"Skill Development",sub:"Applied Practice",cls:"green",items:["Apply relational intelligence strategies when engaging with kinship caregivers and extended family systems.","Identify signs of relational strain, trauma activation, and unaddressed family conflict.","Practice approaches for navigating difficult conversations and competing loyalties.","Utilise trauma-informed communication techniques that strengthen trust and collaborative problem-solving."]},
+      transfer: {label:"Workplace Application",sub:"Transfer to Practice",cls:"purple",items:["Identify opportunities to integrate relationally informed, trauma-responsive approaches into kinship care practice.","Develop strategies to better support kinship caregivers navigating emotional exhaustion and system pressures.","Create an individualized action plan for strengthening relational intelligence within your own role."]}
     },
     speakers: [
-      {
-        name:"Michelle Mares",
-        title:"Faculty, Kempe Center",
-        org:"University of Colorado Anschutz Medical Campus",
-        initials:"MM",
-        bio:"Michelle C. Mares, BS, MS-Organizational Leadership, PCC, CPCC, is a faculty member at the Kempe Center (University of Colorado Anschutz) and an international faculty member and systems coach for CRR Global. She leads the Foster, Kin, and Adoptive Parent Training Department for Colorado's Child Welfare Training System and brings 10 years of lived experience as a foster parent. She is a trained TBRI Practitioner, certified in Polyvagal Theory, and utilizes Organizational Relationship Systems Coaching to navigate complex dynamics."
-      }
+      {name:"Michelle Mares",title:"Faculty, Kempe Center · International Systems Coach",org:"Kempe Center / CRR Global",bio:"28+ years at the intersection of neurobiology and organizational health; leads Colorado's statewide Foster, Kin, and Adoptive Parent Training. A former foster parent and trained TBRI Practitioner.",photo:CDN+"a3e21ea156c249bbbb07aab7866420c5.jpg"}
     ]
   },
   {
@@ -1036,80 +601,18 @@ const sessions = [
     endDate:"2026-10-06",   endTime:"17:30",
     title: "Train Your Brain for Better Work",
     subtitle: "Practical Mindfulness That Sticks",
-    tags: ["leadership","facilitation"],
-    tagLabels: [
-      {text:"Leadership",cls:"blue"},
-      {text:"Mindfulness",cls:"teal"},
-      {text:"Wellbeing",cls:"green"}
-    ],
-    description: "This interactive 3-hour workshop introduces participants to the science and practice of organizational mindfulness as a performance-focused, evidence-based approach to developing critical mental and emotional skills for today's workplace. Drawing on neuroscience, organizational science, and secular mindfulness practices, participants will build practical capabilities to manage stress, improve focus, regulate emotions, and strengthen interpersonal effectiveness.",
+    tagLabels: ["Leadership","Mindfulness","Wellbeing"],
+    description: "This interactive Skill Building Institute introduces participants to the science and practice of organizational mindfulness as a performance-focused, evidence-based approach to developing critical mental and emotional skills for today's workplace. Drawing on neuroscience, organizational science, and secular mindfulness practices, participants will build practical capabilities to manage stress, improve focus, regulate emotions, and strengthen interpersonal effectiveness. Through a combination of facilitated discussion, guided exercises, and real-world application, participants will learn how to apply mindfulness techniques both in structured practice and \"in-the-moment\" situations to improve decision-making, communication, and resilience in high-pressure environments.",
     objectives: {
-      why: {
-        label:"Foundational Knowledge",
-        sub:"Understanding the Why",
-        cls:"",
-        items:[
-          "Explain organizational mindfulness as a science-based, performance-focused intervention.",
-          "Describe how the brain's non-conscious processes and negative bias contribute to stress and workplace challenges.",
-          "Identify common workplace stressors and their connection to mental and emotional processes."
-        ]
-      },
-      how: {
-        label:"Core Concepts",
-        sub:"Understanding the How",
-        cls:"teal",
-        items:[
-          "Define mindfulness as conscious awareness characterized by attention to the present moment without judgment.",
-          "Describe the attentional process: recognizing autopilot, shifting attention, and observing with objectivity.",
-          "Differentiate between formal and informal mindfulness practices and their applications.",
-          "Explain how mindfulness functions as neural training, influencing brain structure through neuroplasticity."
-        ]
-      },
-      practice: {
-        label:"Skill Development",
-        sub:"Applied Practice",
-        cls:"green",
-        items:[
-          "Interrupt automatic reactions and return to conscious awareness.",
-          "Shift attention to the present moment.",
-          "Decenter and observe thoughts and emotions without reacting.",
-          "Apply brief, in-the-moment mindfulness practices to manage stress in challenging situations."
-        ]
-      },
-      transfer: {
-        label:"Workplace Application",
-        sub:"Transfer to Practice",
-        cls:"purple",
-        items:[
-          "Identify specific workplace scenarios where mindfulness practices can improve outcomes.",
-          "Select appropriate mindfulness techniques to address stress, reactivity, and communication challenges.",
-          "Develop a personal plan to integrate daily informal practices into your work routine.",
-          "Describe how mindfulness contributes to leadership effectiveness and organizational performance."
-        ]
-      }
+      why:      {label:"Foundational Knowledge",sub:"Understanding the Why",cls:"",items:["Explain organizational mindfulness as a science-based, performance-focused intervention.","Describe how the brain's non-conscious processes and negative bias contribute to stress and workplace challenges.","Identify common workplace stressors and their connection to mental and emotional processes."]},
+      how:      {label:"Core Concepts",sub:"Understanding the How",cls:"teal",items:["Define mindfulness as conscious awareness characterized by attention to the present moment without judgment.","Describe the attentional process: recognizing autopilot, shifting attention, and observing with objectivity.","Differentiate between formal and informal mindfulness practices and their applications.","Explain how mindfulness functions as neural training, influencing brain structure through neuroplasticity."]},
+      practice: {label:"Skill Development",sub:"Applied Practice",cls:"green",items:["Interrupt automatic reactions and return to conscious awareness.","Shift attention to the present moment.","Decenter and observe thoughts and emotions without reacting.","Apply brief, in-the-moment mindfulness practices to manage stress in challenging situations."]},
+      transfer: {label:"Workplace Application",sub:"Transfer to Practice",cls:"purple",items:["Identify specific workplace scenarios where mindfulness practices can improve outcomes.","Select appropriate mindfulness techniques to address stress, reactivity, and communication challenges.","Develop a personal plan to integrate daily informal practices into your work routine.","Describe how mindfulness contributes to leadership effectiveness and organizational performance."]}
     },
     speakers: [
-      {
-        name:"Stacey Moss",
-        title:"President and CEO",
-        org:"Public Knowledge®",
-        initials:"SM",
-        bio:"Stacey Moss, JD, CWLS, PMP®, IOSM Teacher and Facilitator, is President and CEO of Public Knowledge®, bringing more than 25 years of experience across government, legal, and nonprofit sectors. A Child Welfare Law Specialist and Project Management Professional, she has delivered more than 200 trainings and presentations on leadership, procurement, and child welfare practice."
-      },
-      {
-        name:"Tracy Malone",
-        title:"Prosci® Certified Change Practitioner",
-        org:"Public Knowledge®",
-        initials:"TM",
-        bio:"Tracy is an experienced child welfare administrator with 28 years of public child welfare experience, ranging from frontline worker and supervisor to regional and statewide director positions. She specializes in child welfare reform, court improvement, education and training, and continuous quality improvement."
-      },
-      {
-        name:"Jude Louissaint",
-        title:"Management Consultant",
-        org:"Public Knowledge®",
-        initials:"JL",
-        bio:"Jude is a Management Consultant at Public Knowledge with more than 30 years of experience across local, state, and federal child welfare systems. An International Coaching Federation Certified Master Coach, he specializes in leadership development, executive coaching, and driving sustainable systems change. He began his career with New York City's Administration for Children's Services and holds an MSW from Fordham University."
-      }
+      {name:"Stacey Moss",title:"President & CEO",org:"Public Knowledge®",bio:"25+ years across government, legal, and nonprofit sectors; Child Welfare Law Specialist leading system transformation nationwide. Leads the Public Knowledge IMPACT Leadership Program.",photo:CDN+"a0b234bb70834f66aedb516198806f4b.jpg"},
+      {name:"Tracy Malone",title:"Senior Consultant · MSW, Prosci® Certified",org:"Public Knowledge®",bio:"28 years in public child welfare from frontline worker to statewide director, specializing in child welfare reform and continuous quality improvement.",photo:CDN+"1674b55b6c684eda8785ab18030738e1.jpg"},
+      {name:"Jude Louissaint",title:"Management Consultant · MSW, ICF Certified Master Coach",org:"Public Knowledge®",bio:"30+ years across local, state, and federal child welfare, including Director of Field Operations at NYC's Administration for Children's Services. Specializes in leadership development and systems change.",photo:CDN+"08aa9a7aa0094bfeb36a4a41be2f5617.jpg"}
     ]
   },
   {
@@ -1118,67 +621,16 @@ const sessions = [
     endDate:"2026-10-06",   endTime:"17:30",
     title: "Working Relationally",
     subtitle: "Strengthening Families, Networks, and Hope",
-    tags: ["family-engagement","facilitation","foster-care"],
-    tagLabels: [
-      {text:"Relational Practice",cls:"teal"},
-      {text:"Family Systems",cls:"green"},
-      {text:"Strengths-Based",cls:"blue"}
-    ],
-    description: "This Skill Building Institute focuses on the why and how of shifting toward relational practice in work with children, youth, families, and wider systems. Grounded in strengths, participation, relational permanency, family systems thinking, mapping, networks, belonging, support planning, and cultural context, the session will highlight practical tools that help practitioners work alongside people rather than doing work to or for them.",
+    tagLabels: ["Relational Practice","Family Systems","Strengths-Based"],
+    description: "This Skill Building Institute on whole family systems, relational permanency, and participatory tools focuses on the why and how of shifting toward relational practice in our work with children, youth, families, and the wider systems around them. This Institute will explore what it means to work relationally with families and whole family systems broadening out to community as defined by the affected; drawing on family systems thinking, mapping, strengths, networks, belonging, support planning, and cultural context. And an overriding concept of Relational Permanency. It will concurrently consider how relational practice extends to young people in care, youth justice, homelessness, and community contexts.",
     objectives: {
-      why: {
-        label:"Foundational Knowledge",
-        sub:"Understanding the Why",
-        cls:"",
-        items:[
-          "Describe the rationale for shifting toward relational practice in work with children, youth, families, and wider systems.",
-          "Explain that relational health is foundational for performance and achievement in other life areas.",
-          "Describe relational permanency as an overriding concept in work with families and communities.",
-          "Reflect on why staff working relationally with one another is a precursor to relational work with those served."
-        ]
-      },
-      how: {
-        label:"Core Concepts",
-        sub:"Understanding the How",
-        cls:"teal",
-        items:[
-          "Identify key elements of working relationally: collaboration, mapping, strengths, networks, belonging, and cultural context.",
-          "Explore family systems thinking and community as defined by those affected.",
-          "Examine the difference between tokenized engagement and true engagement.",
-          "Consider how 'family' may be understood as important people and networks of connection."
-        ]
-      },
-      practice: {
-        label:"Skill Development",
-        sub:"Applied Practice",
-        cls:"green",
-        items:[
-          "Use mapping to support planning with those served and create context for family-defined goals.",
-          "Apply strengths-based thinking through the 'what CAN' concept.",
-          "Engage with practical approaches connected to courageous leaning in and the Triangle of Hope.",
-          "Practice thinking relationally about families, belonging, mattering, and support planning."
-        ]
-      },
-      transfer: {
-        label:"Workplace Application",
-        sub:"Transfer to Practice",
-        cls:"purple",
-        items:[
-          "Examine how relational practice applies in family-based work, youth in care, and community-based settings.",
-          "Consider practical ways to apply relational approaches in your own settings.",
-          "Identify ways to support collaboration through strengths, participation, and relational permanency.",
-          "Leave with practical takeaways you can apply in your own settings."
-        ]
-      }
+      why:      {label:"Foundational Knowledge",sub:"Understanding the Why",cls:"",items:["Describe the rationale for shifting toward relational practice in work with children, youth, families, and wider systems.","Explain that relational health is foundational for performance and achievement in other life areas.","Describe relational permanency as an overriding concept in work with families and communities.","Reflect on why staff working relationally with one another is a precursor to relational work with those served."]},
+      how:      {label:"Core Concepts",sub:"Understanding the How",cls:"teal",items:["Identify key elements of working relationally: collaboration, mapping, strengths, networks, belonging, and cultural context.","Explore family systems thinking and community as defined by those affected.","Examine the difference between tokenized engagement and true engagement.","Consider how 'family' may be understood as important people and networks of connection."]},
+      practice: {label:"Skill Development",sub:"Applied Practice",cls:"green",items:["Use mapping to support planning with those served and create context for family-defined goals.","Apply strengths-based thinking through the 'what CAN' concept.","Engage with practical approaches connected to courageous leaning in and the Triangle of Hope.","Practice thinking relationally about families, belonging, mattering, and support planning."]},
+      transfer: {label:"Workplace Application",sub:"Transfer to Practice",cls:"purple",items:["Examine how relational practice applies in family-based work, youth in care, and community-based settings.","Consider practical ways to apply relational approaches in your own settings.","Identify ways to support collaboration through strengths, participation, and relational permanency."]}
     },
     speakers: [
-      {
-        name:"Dan Martin",
-        title:"Child Welfare Specialist",
-        org:"",
-        initials:"DM",
-        bio:"Dan Martin is an internationally recognized child welfare specialist with deep expertise in relational practice, family systems, and strengths-based approaches. He works with practitioners and organizations to shift from compliance-driven models toward relational, hope-centered practice."
-      }
+      {name:"Dan Martin",title:"Director",org:"Daniel Martin Consulting",bio:"Developer of the HEERO Model for resilience, belonging, and healing, with 30+ years in child welfare, mental health, and addictions across four Canadian agencies. Trains practitioners across North America and internationally.",photo:CDN+"20efd7dd23744a78b7eeb2f76056a761.png"}
     ]
   },
   {
@@ -1187,66 +639,16 @@ const sessions = [
     endDate:"2026-10-06",   endTime:"19:30",
     title: "Strengthening Families",
     subtitle: "Turning Protective Factors into Action",
-    tags: ["family-engagement","facilitation"],
-    tagLabels: [
-      {text:"Protective Factors",cls:"green"},
-      {text:"Prevention",cls:"teal"},
-      {text:"Family Strengths",cls:"blue"}
-    ],
-    description: "This engaging and interactive Skill Building Institute explores the nationally recognized Strengthening Families Protective Factors Framework, a research-informed approach designed to increase family strengths, support healthy child development, and reduce the likelihood of child abuse and neglect. Participants will gain an in-depth understanding of the five Protective Factors while exploring practical strategies for strength-based work with families.",
+    tagLabels: ["Protective Factors","Prevention","Family Strengths"],
+    description: "This engaging and interactive Skill Building Institute explores the nationally recognized Strengthening Families Protective Factors Framework, a research-informed approach designed to increase family strengths, support healthy child development, and reduce the likelihood of child abuse and neglect. Participants will gain an in-depth understanding of the five Protective Factors—Parental Resilience, Social Connections, Knowledge of Parenting and Child Development, Concrete Support in Times of Need, and Children's Social and Emotional Competence—while exploring practical strategies for strength-based work with families. Designed as a stand-alone introduction to the Framework, this Institute equips community members, practitioners, educators, advocates, and leaders with tools to move from knowledge to meaningful action in practice and community settings.",
     objectives: {
-      why: {
-        label:"Foundational Knowledge",
-        sub:"Understanding the Why",
-        cls:"",
-        items:[
-          "Describe the purpose and history of the Strengthening Families Protective Factors Framework.",
-          "Explain how the Framework reduces the likelihood of child abuse and neglect.",
-          "Identify the research-informed foundation of the Strengthening Families approach.",
-          "Describe how a protective factors approach supports prevention-focused practice through resilience and hope."
-        ]
-      },
-      how: {
-        label:"Core Concepts",
-        sub:"Understanding the How",
-        cls:"teal",
-        items:[
-          "Identify and describe the five Protective Factors: Parental Resilience, Social Connections, Knowledge of Parenting and Child Development, Concrete Support in Times of Need, and Children's Social and Emotional Competence.",
-          "Explain how the five Protective Factors help strengthen families and promote resilience.",
-          "Explore how protective factors can inform practice, program design, and community engagement."
-        ]
-      },
-      practice: {
-        label:"Skill Development",
-        sub:"Applied Practice",
-        cls:"green",
-        items:[
-          "Apply a strength-based lens when working with families.",
-          "Use the Protective Factors Framework to identify opportunities to increase family strengths.",
-          "Practice moving from knowledge of the Framework to meaningful action in real-world settings.",
-          "Use the Strengthening Families Self-Assessment tool as a resource for reflection and planning."
-        ]
-      },
-      transfer: {
-        label:"Workplace Application",
-        sub:"Transfer to Practice",
-        cls:"purple",
-        items:[
-          "Identify ways to integrate the Strengthening Families Framework into your own work.",
-          "Develop strategies for using the Framework to support prevention-focused practice.",
-          "Apply practical tools that strengthen family resilience, connection, and support.",
-          "Strengthen your capacity to support child, youth, family, and community well-being."
-        ]
-      }
+      why:      {label:"Foundational Knowledge",sub:"Understanding the Why",cls:"",items:["Describe the purpose and history of the Strengthening Families Protective Factors Framework.","Explain how the Framework reduces the likelihood of child abuse and neglect.","Identify the research-informed foundation of the Strengthening Families approach.","Describe how a protective factors approach supports prevention-focused practice through resilience and hope."]},
+      how:      {label:"Core Concepts",sub:"Understanding the How",cls:"teal",items:["Identify and describe the five Protective Factors: Parental Resilience, Social Connections, Knowledge of Parenting and Child Development, Concrete Support in Times of Need, and Children's Social and Emotional Competence.","Explain how the five Protective Factors help strengthen families and promote resilience.","Explore how protective factors can inform practice, program design, and community engagement."]},
+      practice: {label:"Skill Development",sub:"Applied Practice",cls:"green",items:["Apply a strength-based lens when working with families.","Use the Protective Factors Framework to identify opportunities to increase family strengths.","Practice moving from knowledge of the Framework to meaningful action in real-world settings.","Use the Strengthening Families Self-Assessment tool as a resource for reflection and planning."]},
+      transfer: {label:"Workplace Application",sub:"Transfer to Practice",cls:"purple",items:["Identify ways to integrate the Strengthening Families Framework into your own work.","Develop strategies for using the Framework to support prevention-focused practice.","Apply practical tools that strengthen family resilience, connection, and support."]}
     },
     speakers: [
-      {
-        name:"Colleen Gibley-Reed",
-        title:"Director of Education",
-        org:"Illuminate Colorado",
-        initials:"CG",
-        bio:"Colleen Gibley-Reed (she/her) is Director of Education at Illuminate Colorado, where she leads education strategies including curricula development, training delivery, and continuous quality improvement. She spent nearly eleven years with the Kempe Center and nineteen years with Larimer County Department of Human Services, with experience in family preservation, ongoing child protection, foster and kinship care, and practice coaching. She also serves as adjunct faculty at the University of Denver's Graduate School of Social Work."
-      }
+      {name:"Colleen Gibley-Reed",title:"Director of Education",org:"Illuminate Colorado",bio:"Former Kempe Center Faculty Instructor with 19 years in Larimer County child welfare. Leads education programming at Illuminate Colorado, equipping practitioners to help families thrive.",photo:CDN+"f44828c03f9949b4b8725f7f99745154.jpg"}
     ]
   },
   {
@@ -1255,63 +657,16 @@ const sessions = [
     endDate:"2026-10-06",   endTime:"19:30",
     title: "Navigating Conflict in Meeting Spaces",
     subtitle: "Regulation, Power, and Repair",
-    tags: ["facilitation","leadership","family-engagement"],
-    tagLabels: [
-      {text:"Conflict",cls:"orange"},
-      {text:"Co-Regulation",cls:"teal"},
-      {text:"Facilitation",cls:"blue"}
-    ],
-    description: "Conflict shows up at every table where this work happens—professional meetings, family and network meetings, and everyday moments in between. This interactive workshop builds practical, transferable skills for navigating conflict wherever it arises. Grounded in Bruce Perry's sequence—regulate, then relate, then reason—participants practice settling themselves and helping a room settle before any problem-solving starts.",
+    tagLabels: ["Conflict","Co-Regulation","Facilitation"],
+    description: "This interactive Skill Building Institute builds practical, transferable skills for navigating conflict wherever it arises—and it begins where conflict actually begins: in the nervous system. Grounded in Bruce Perry's sequence—regulate, then relate, then reason—participants practice settling themselves and helping a room settle (self- and co-regulation) before any problem-solving starts. From there we move into reading the room, naming power and the real disagreement beneath stated positions, and working toward repair. Using breakout rooms and simulated scenarios, participants practice with established conflict and mediation tools—caucusing, surfacing the interests beneath positions, the Tree of Life, and collective problem-solving—applied to the real, everyday conflicts they bring.",
     objectives: {
-      why: {
-        label:"Foundational Knowledge",
-        sub:"Understanding the Why",
-        cls:"",
-        items:[
-          "Conflict is part of every meeting space in this work—the skills transfer across all of them.",
-          "When conflict is avoided or mishandled, decisions narrow and relationships fray—and families carry the cost.",
-          "Conflict begins in the body before it reaches the conversation: Perry's regulate → relate → reason tells us why."
-        ]
-      },
-      how: {
-        label:"Core Concepts",
-        sub:"Understanding the How",
-        cls:"teal",
-        items:[
-          "Self- and co-regulation: how our nervous system shapes a room, and how a regulated facilitator helps others settle.",
-          "Positions versus interests: most conflict is fought over stated positions while the real disagreement sits underneath.",
-          "Power is always in the room—naming it honestly is what makes honest conversation possible."
-        ]
-      },
-      practice: {
-        label:"Skill Development",
-        sub:"Applied Practice",
-        cls:"green",
-        items:[
-          "Practice self-regulation in a heated moment, and co-regulation to help a room come back down.",
-          "Work a real, everyday conflict through established tools: caucusing, surfacing interests, the Tree of Life.",
-          "Name the real disagreement and make the repair move: bringing a fractured conversation back to shared purpose."
-        ]
-      },
-      transfer: {
-        label:"Workplace Application",
-        sub:"Transfer to Practice",
-        cls:"purple",
-        items:[
-          "Identify the conflicts you actually meet—at work, in family meetings, and day to day—and which skill each calls for.",
-          "Build a personal regulation practice you can use before and during hard conversations.",
-          "Leave with a first move and a way to keep practicing self- and co-regulation long after the institute ends."
-        ]
-      }
+      why:      {label:"Foundational Knowledge",sub:"Understanding the Why",cls:"",items:["Conflict is part of every meeting space in this work—the skills transfer across all of them.","When conflict is avoided or mishandled, decisions narrow and relationships fray—and families carry the cost.","Conflict begins in the body before it reaches the conversation: Perry's regulate → relate → reason tells us why."]},
+      how:      {label:"Core Concepts",sub:"Understanding the How",cls:"teal",items:["Self- and co-regulation: how our nervous system shapes a room, and how a regulated facilitator helps others settle.","Positions versus interests: most conflict is fought over stated positions while the real disagreement sits underneath.","Power is always in the room—naming it honestly is what makes honest conversation possible."]},
+      practice: {label:"Skill Development",sub:"Applied Practice",cls:"green",items:["Practice self-regulation in a heated moment, and co-regulation to help a room come back down.","Work a real, everyday conflict through established tools: caucusing, surfacing interests, the Tree of Life.","Name the real disagreement and make the repair move: bringing a fractured conversation back to shared purpose."]},
+      transfer: {label:"Workplace Application",sub:"Transfer to Practice",cls:"purple",items:["Identify the conflicts you actually meet—at work, in family meetings, and day to day—and which skill each calls for.","Build a personal regulation practice you can use before and during hard conversations.","Leave with a first move and a way to keep practicing self- and co-regulation long after the institute ends."]}
     },
     speakers: [
-      {
-        name:"Liz Wendel",
-        title:"President and Co-Founder",
-        org:"Pale Blue",
-        initials:"LW",
-        bio:"Liz Wendel is President and Co-Founder of Pale Blue, specialising in facilitation, conflict navigation, and restorative practice. She brings deep expertise in applying regulation-based frameworks to professional and family meeting spaces, with a focus on building practical, transferable skills for everyday practice."
-      }
+      {name:"Liz Wendel",title:"Co-Founder & President",org:"Pale Blue",bio:"Co-author of Family Finding® and Family Seeing®; her team linked 10,000+ young people to 26,000+ lasting supports. Teaches one truth: connection is the most powerful intervention we have.",photo:CDN+"8000a49cebfc454c9fb103b9d946b2c9.jpg"}
     ]
   },
   {
@@ -1320,124 +675,59 @@ const sessions = [
     endDate:"2026-10-07",   endTime:"01:30",
     title: "Belonging-Focused Foster Care",
     subtitle: "A Collaborative Approach for Carers, Parents, and Families",
-    tags: ["foster-care","family-engagement","facilitation"],
-    tagLabels: [
-      {text:"Foster Care",cls:"orange"},
-      {text:"Belonging",cls:"teal"},
-      {text:"Family Collaboration",cls:"green"}
-    ],
-    description: "Foster care services face many challenges, most pressing being that too often young people leave care isolated and with few people supporting them. This Skill Building Institute offers a practical, belonging-focused vision for transforming foster care by bringing carers, parents, and extended family together to work collaboratively. Grounded in case examples where fostering has been undertaken as a collaboration between all involved.",
+    tagLabels: ["Foster Care","Belonging","Family Collaboration"],
+    description: "Foster care services face many challenges most pressing is the fact too often young people leave care isolated and with few people supporting them. This Skill Building Institute offers a practical, belonging-focused vision for transforming foster care, by bringing carers, parents and extended family together, to work collaboratively to improve the experience and outcomes of foster care for all involved. The workshop will be grounded in case examples where fostering has been undertaken as a collaboration between carers, the parents and extended family. The processes and practices that underpin this belonging-focused approach will be described in detail and participants actively involved in the learning through discussions and breakout room exercises throughout the workshop.",
     objectives: {
-      why: {
-        label:"Foundational Knowledge",
-        sub:"Understanding the Why",
-        cls:"",
-        items:[
-          "Provide a clear and detailed vision of belonging-focused collaborative foster care.",
-          "Explore the myth of child rescue that underpins foster care.",
-          "Explore systemic and cultural challenges to belonging-focused foster care."
-        ]
-      },
-      how: {
-        label:"Core Concepts",
-        sub:"Understanding the How",
-        cls:"teal",
-        items:[
-          "Explore the processes, practices, and skills that underpin a belonging-focused approach.",
-          "Examine case examples of belonging-focused collaborative foster care, including perspectives from parents and extended family.",
-          "Explore practices of carer and family collaboration."
-        ]
-      },
-      practice: {
-        label:"Skill Development",
-        sub:"Applied Practice",
-        cls:"green",
-        items:[
-          "Participate in small group work and large group sharing focused on case examples.",
-          "Explore foster care recruitment and support practices that enable carers to partner with parents and family.",
-          "Explore ways to revision family time or contact to sustain and deepen connection.",
-          "Explore revised initial placement activities that prioritise family involvement."
-        ]
-      },
-      transfer: {
-        label:"Workplace Application",
-        sub:"Transfer to Practice",
-        cls:"purple",
-        items:[
-          "Identify processes and practices that can support belonging-focused collaborative foster care in your own settings.",
-          "Consider how carers, parents, and extended family can work collaboratively to improve outcomes.",
-          "Apply learning from case examples, discussions, and exercises to foster care practice."
-        ]
-      }
+      why:      {label:"Foundational Knowledge",sub:"Understanding the Why",cls:"",items:["Provide a clear and detailed vision of belonging-focused collaborative foster care.","Explore the myth of child rescue that underpins foster care.","Explore systemic and cultural challenges to belonging-focused foster care."]},
+      how:      {label:"Core Concepts",sub:"Understanding the How",cls:"teal",items:["Explore the processes, practices, and skills that underpin a belonging-focused approach.","Examine case examples of belonging-focused collaborative foster care, including perspectives from parents and extended family.","Explore practices of carer and family collaboration."]},
+      practice: {label:"Skill Development",sub:"Applied Practice",cls:"green",items:["Participate in small group work and large group sharing focused on case examples.","Explore foster care recruitment and support practices that enable carers to partner with parents and family.","Explore ways to revision family time or contact to sustain and deepen connection.","Explore revised initial placement activities that prioritise family involvement."]},
+      transfer: {label:"Workplace Application",sub:"Transfer to Practice",cls:"purple",items:["Identify processes and practices that can support belonging-focused collaborative foster care in your own settings.","Consider how carers, parents, and extended family can work collaboratively to improve outcomes.","Apply learning from case examples, discussions, and exercises to foster care practice."]}
     },
     speakers: [
-      {
-        name:"Andrew Turnell AM",
-        title:"Director",
-        org:"Born to Belong",
-        initials:"AT",
-        bio:"Andrew Turnell AM lives in Australia. He is Social Work Professor of Practice at the University of Cumbria, England and principal co-creator of the Signs of Safety. Andrew is well known internationally for his ground-breaking work in applying safety-organised practice and systemic thinking to statutory child protection services. He is currently working with agencies in England, Belgium, Austria, Canada, Bhutan, and Sweden."
-      },
-      {
-        name:"Anna Strömberg",
-        title:"Foster Carer and Social Worker",
-        org:"Södertalje Children's Services",
-        initials:"AS",
-        bio:"Anna Strömberg is a social worker with a long history of working in children's services, including six years in Myanmar. Absolutely committed to the idea that it takes a village to raise a child, Anna and her husband have been foster carers in Sweden for 15 years, committed to partnering with parents, aunts, uncles, and grandparents from the moment children come to live in their home."
-      }
+      {name:"Andrew Turnell AM",title:"Director · Social Work Professor of Practice, Univ. of Cumbria",org:"Born to Belong",bio:"Principal co-creator of Signs of Safety; internationally renowned for applying safety-organised practice to statutory child protection. Currently works with agencies across England, Europe, Canada, and beyond.",photo:CDN+"7464efdc944f405c86ac7cab697ff19c.png"},
+      {name:"Anna Strömberg",title:"Foster Carer & Social Worker",org:"Södertalje Children's Services",bio:"Social worker with extensive experience in children's services including six years in Myanmar. Has been a committed foster carer in Sweden for 15 years, partnering with parents in every placement.",photo:""}
     ]
   }
 ];
 
 // ─── TIME SLOTS ────────────────────────────────────────────────────────────
-// Group sessions by start time (Eastern)
-function getSlotKey(s) { return s.startDate + "T" + s.startTime; }
 const slotOrder = ["2026-10-06T06:00","2026-10-06T10:00","2026-10-06T12:00","2026-10-06T14:00","2026-10-06T16:00","2026-10-06T22:00"];
 const slotMap = {};
 sessions.forEach(s => {
-  const k = getSlotKey(s);
+  const k = s.startDate + "T" + s.startTime;
   if (!slotMap[k]) slotMap[k] = [];
   slotMap[k].push(s);
 });
 
+// Build speaker lookup for tooltip
+const speakerLookup = {};
+sessions.forEach(s => s.speakers.forEach((sp,i) => { speakerLookup[`${s.code}-${i}`] = sp; }));
+
 // ─── STATE ─────────────────────────────────────────────────────────────────
-let activeFilter = "all";
-let activeTags = new Set();
+let showDayEveOnly = false;
 
 // ─── RENDER ────────────────────────────────────────────────────────────────
-function initials(n) { return n.split(" ").map(w=>w[0]).slice(0,2).join("").toUpperCase(); }
-
 function render() {
   const tz = sel.value;
   const abbr = getTzAbbr(tz);
   const main = document.getElementById("mainContent");
   main.innerHTML = "";
-
   let anyVisible = false;
 
   slotOrder.forEach(slotKey => {
-    const slotSessions = (slotMap[slotKey]||[]);
+    const slotSessions = slotMap[slotKey] || [];
     if (!slotSessions.length) return;
 
-    // Filter sessions
     const visible = slotSessions.filter(s => {
-      const sUtc = easternToUtc(s.startDate, s.startTime);
-      const eUtc = easternToUtc(s.endDate, s.endTime);
-      const cat = getTimeCategory(sUtc, eUtc, tz);
-
-      if (activeFilter === "daytime" && cat !== "daytime") return false;
-      if (activeFilter === "evening" && cat !== "evening") return false;
-      if (activeTags.size > 0) {
-        const hasTag = [...activeTags].some(t => s.tags.includes(t));
-        if (!hasTag) return false;
-      }
-      return true;
+      if (!showDayEveOnly) return true;
+      const sU = easternToUtc(s.startDate, s.startTime);
+      const eU = easternToUtc(s.endDate, s.endTime);
+      return getTimeCategory(sU, eU, tz) !== "neutral";
     });
 
     if (!visible.length) return;
     anyVisible = true;
 
-    // Build slot time label
     const firstS = slotSessions[0];
     const sUtc = easternToUtc(firstS.startDate, firstS.startTime);
     const eUtc = easternToUtc(firstS.endDate, firstS.endTime);
@@ -1446,18 +736,20 @@ function render() {
     const sessionCount = visible.length;
 
     const section = document.createElement("div");
-    section.className = `slot-section ${cat}`;
+    section.className = "slot-section";
 
-    // Slot header
-    const catBadge = cat === "daytime" ? `<span class="slot-badge green">Daytime hours</span>` :
-                     cat === "evening" ? `<span class="slot-badge">Evening hours</span>` :
-                     `<span class="slot-badge neutral">Off-hours</span>`;
+    const catBadge = cat === "daytime"
+      ? `<span class="slot-badge green">Daytime</span>`
+      : cat === "evening"
+        ? `<span class="slot-badge">Evening</span>`
+        : `<span class="slot-badge neutral">Off-hours</span>`;
+
     section.innerHTML = `
       <div class="slot-header">
         <span class="slot-time">${timeLabel}</span>
         <span class="slot-tz-abbr">${abbr}</span>
         ${catBadge}
-        <span style="font-size:0.75rem;color:#aaa;margin-left:4px;">${sessionCount} session${sessionCount!==1?"s":""}</span>
+        <span style="font-size:0.75rem;color:#aaa;">${sessionCount} session${sessionCount!==1?"s":""}</span>
       </div>
       <div class="session-grid" id="grid-${slotKey.replace(/[:-]/g,'_')}"></div>
     `;
@@ -1465,42 +757,30 @@ function render() {
     const grid = section.querySelector(".session-grid");
 
     visible.forEach(s => {
-      const sU = easternToUtc(s.startDate, s.startTime);
-      const eU = easternToUtc(s.endDate, s.endTime);
+      const tagsHtml = s.tagLabels.map(t=>`<span class="card-tag">${t}</span>`).join("");
 
-      const tagsHtml = s.tagLabels.map(t=>`<span class="card-tag ${t.cls}">${t.text}</span>`).join("");
-      const speakerLines = s.speakers.map(sp=>`
-        <div class="speaker-line">
-          <div class="speaker-avatar">${initials(sp.name)}</div>
-          <div class="speaker-info">
-            <div class="speaker-name">${sp.name}</div>
-            <div class="speaker-role">${sp.org||sp.title}</div>
-          </div>
-        </div>
-      `).join("");
-
-      const biosHtml = s.speakers.map((sp,i)=>`
-        <div class="bio-card">
-          <div class="bio-header">
-            <div class="bio-avatar">${initials(sp.name)}</div>
+      const speakersHtml = s.speakers.map((sp,i) => {
+        const imgSrc = sp.photo || `https://placehold.co/32x32/e8eaed/888?text=${encodeURIComponent((sp.name||"?")[0])}`;
+        return `
+          <div class="speaker-chip" data-si="${s.code}-${i}">
+            <img class="speaker-photo" src="${imgSrc}" alt="${sp.name}"
+              onerror="this.src='https://placehold.co/32x32/e8eaed/888?text=${encodeURIComponent((sp.name||"?")[0])}'">
             <div>
-              <div class="bio-name">${sp.name}</div>
-              <div class="bio-title-org">${sp.title}${sp.org?` · ${sp.org}`:""}</div>
+              <div class="speaker-name">${sp.name}</div>
+              ${sp.org ? `<div class="speaker-role">${sp.org}</div>` : ""}
             </div>
           </div>
-          <div class="bio-text" id="bio-${s.code}-${i}">${sp.bio}</div>
-          ${sp.bio.length>200?`<button class="bio-toggle" onclick="toggleBio('bio-${s.code}-${i}',this)">Read more ▾</button>`:""}
-        </div>
-      `).join("");
+        `;
+      }).join("");
 
       const objKeys = ["why","how","practice","transfer"];
-      const objHtml = objKeys.map(k=>{
+      const objHtml = objKeys.map(k => {
         const o = s.objectives[k];
         return `
           <div class="obj-block ${o.cls||''}">
             <div class="obj-label">${o.label}</div>
             <div class="obj-sublabel">${o.sub}</div>
-            <ul class="obj-list">${o.items.map(i=>`<li>${i}</li>`).join("")}</ul>
+            <ul class="obj-list">${o.items.map(it=>`<li>${it}</li>`).join("")}</ul>
           </div>
         `;
       }).join("");
@@ -1513,21 +793,17 @@ function render() {
         <div class="card-body">
           <div class="card-tags">${tagsHtml}</div>
           <div class="card-title">${s.title}</div>
-          <div style="font-size:0.82rem;font-weight:600;color:#187089;margin-bottom:12px;line-height:1.3;">${s.subtitle}</div>
-          <div class="card-speakers">${speakerLines}</div>
-          <div class="card-desc">${s.description}</div>
+          <div class="card-subtitle">${s.subtitle}</div>
+          <div class="card-speakers">${speakersHtml}</div>
+          <div class="card-desc clamped" id="desc-${s.code}">${s.description}</div>
         </div>
         <div class="card-footer">
-          <button class="expand-btn" onclick="toggleCard(this)" aria-expanded="false">
-            View full details <span class="expand-icon">▼</span>
+          <button class="expand-btn" onclick="toggleCard(this,'${s.code}')" aria-expanded="false">
+            View full details <span class="expand-icon" id="icon-${s.code}">▼</span>
           </button>
         </div>
         <div class="card-detail" id="detail-${s.code}">
           <div class="objectives-grid">${objHtml}</div>
-          <div class="bio-section">
-            <div class="bio-section-title">About the presenter${s.speakers.length>1?"s":""}</div>
-            ${biosHtml}
-          </div>
         </div>
       `;
       grid.appendChild(card);
@@ -1536,65 +812,94 @@ function render() {
     main.appendChild(section);
   });
 
-  const empty = document.getElementById("emptyState");
-  empty.classList.toggle("visible", !anyVisible);
+  document.getElementById("emptyState").classList.toggle("visible", !anyVisible);
+
+  attachTooltips();
+  notifyHeight();
 }
 
-function toggleCard(btn) {
-  const card = btn.closest(".session-card");
-  const code = card.dataset.code;
+function toggleCard(btn, code) {
+  const desc   = document.getElementById("desc-"+code);
   const detail = document.getElementById("detail-"+code);
-  const icon = btn.querySelector(".expand-icon");
+  const icon   = document.getElementById("icon-"+code);
   const isOpen = detail.classList.contains("open");
-  detail.classList.toggle("open", !isOpen);
-  icon.classList.toggle("open", !isOpen);
-  btn.querySelector("span:not(.expand-icon)").textContent = isOpen ? "View full details " : "Hide details ";
-  btn.setAttribute("aria-expanded", String(!isOpen));
+
+  if (isOpen) {
+    desc.classList.add("clamped");
+    detail.classList.remove("open");
+    icon.classList.remove("open");
+    btn.childNodes[0].textContent = "View full details ";
+    btn.setAttribute("aria-expanded","false");
+  } else {
+    desc.classList.remove("clamped");
+    detail.classList.add("open");
+    icon.classList.add("open");
+    btn.childNodes[0].textContent = "Hide details ";
+    btn.setAttribute("aria-expanded","true");
+  }
+  notifyHeight();
 }
 
-function toggleBio(id, btn) {
-  const el = document.getElementById(id);
-  el.classList.toggle("expanded");
-  btn.textContent = el.classList.contains("expanded") ? "Read less ▴" : "Read more ▾";
-}
+// ─── TOOLTIP ───────────────────────────────────────────────────────────────
+const tt      = document.getElementById("globalTooltip");
+const ttPhoto = document.getElementById("ttPhoto");
+const ttName  = document.getElementById("ttName");
+const ttTitle = document.getElementById("ttTitle");
+const ttOrg   = document.getElementById("ttOrg");
+const ttBio   = document.getElementById("ttBio");
 
-// ─── FILTERS ───────────────────────────────────────────────────────────────
-document.querySelectorAll(".filter-chip").forEach(btn => {
-  btn.addEventListener("click", () => {
-    if (btn.dataset.filter) {
-      document.querySelectorAll(".filter-chip[data-filter]").forEach(b=>b.classList.remove("active"));
-      btn.classList.add("active");
-      activeFilter = btn.dataset.filter;
-    } else if (btn.dataset.tag) {
-      const t = btn.dataset.tag;
-      if (activeTags.has(t)) { activeTags.delete(t); btn.classList.remove("active"); }
-      else { activeTags.add(t); btn.classList.add("active"); }
-    }
-    render();
+function attachTooltips() {
+  document.querySelectorAll(".speaker-chip").forEach(chip => {
+    const key = chip.dataset.si;
+    const sp = speakerLookup[key];
+    if (!sp) return;
+
+    chip.addEventListener("mouseenter", () => {
+      const imgSrc = sp.photo || "";
+      ttPhoto.src = imgSrc;
+      ttPhoto.style.display = imgSrc ? "block" : "none";
+      ttName.textContent  = sp.name;
+      ttTitle.textContent = sp.title || "";
+      ttOrg.textContent   = sp.org || "";
+      ttBio.textContent   = sp.bio || "";
+
+      const rect = chip.getBoundingClientRect();
+      let top  = rect.top - 220 - 12;
+      if (top < 8) top = rect.bottom + 12;
+      let left = rect.left;
+      if (left + 275 > window.innerWidth) left = window.innerWidth - 280;
+
+      tt.style.top  = top + "px";
+      tt.style.left = left + "px";
+      tt.style.display = "block";
+    });
+    chip.addEventListener("mouseleave", () => { tt.style.display = "none"; });
   });
+}
+
+// ─── FILTER TOGGLE ─────────────────────────────────────────────────────────
+document.getElementById("filterDayEve").addEventListener("click", function() {
+  showDayEveOnly = !showDayEveOnly;
+  this.classList.toggle("active", showDayEveOnly);
+  render();
 });
 
 sel.addEventListener("change", render);
 
-// Init
-render();
-
 // ─── IFRAME AUTO-RESIZE ────────────────────────────────────────────────────
-// Sends document height to parent frame so the embed code can resize the iframe
 function notifyHeight() {
   const h = document.documentElement.scrollHeight;
-  if (window.parent !== window) {
-    window.parent.postMessage({ ggWidgetHeight: h }, "*");
-  }
+  if (window.parent !== window) window.parent.postMessage({ ggWidgetHeight: h }, "*");
 }
-
-// Fire on load, after render, and whenever DOM size changes
 notifyHeight();
 if (typeof ResizeObserver !== "undefined") {
   new ResizeObserver(notifyHeight).observe(document.body);
 } else {
   window.addEventListener("resize", notifyHeight);
 }
+
+// Init
+render();
 </script>
 </body>
 </html>

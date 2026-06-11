@@ -412,7 +412,7 @@ function getUtcOffsetMinutes(zone) {
 function easternToUtc(dateStr, timeStr) {
   const [y,m,d] = dateStr.split("-").map(Number);
   const [h,mi] = timeStr.split(":").map(Number);
-  return new Date(Date.UTC(y, m-1, d, h+4, mi));
+  return new Date(Date.UTC(y, m-1, d, h+7, mi)); // stored times are in PDT (UTC-7)
 }
 function formatInTz(dt, tz) {
   return new Intl.DateTimeFormat("en-US",{hour:"numeric",minute:"2-digit",timeZone:tz}).format(dt);
@@ -671,8 +671,8 @@ const sessions = [
   },
   {
     code: "BELO5612",
-    startDate:"2026-10-06", startTime:"22:00",
-    endDate:"2026-10-07",   endTime:"01:30",
+    startDate:"2026-10-06", startTime:"06:00",
+    endDate:"2026-10-06",   endTime:"09:30",
     title: "Belonging-Focused Foster Care",
     subtitle: "A Collaborative Approach for Carers, Parents, and Families",
     tagLabels: ["Foster Care","Belonging","Family Collaboration"],
@@ -691,7 +691,7 @@ const sessions = [
 ];
 
 // ─── TIME SLOTS ────────────────────────────────────────────────────────────
-const slotOrder = ["2026-10-06T06:00","2026-10-06T10:00","2026-10-06T12:00","2026-10-06T14:00","2026-10-06T16:00","2026-10-06T22:00"];
+const slotOrder = ["2026-10-06T06:00","2026-10-06T10:00","2026-10-06T12:00","2026-10-06T14:00","2026-10-06T16:00"];
 const slotMap = {};
 sessions.forEach(s => {
   const k = s.startDate + "T" + s.startTime;

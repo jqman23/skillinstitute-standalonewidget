@@ -1469,7 +1469,9 @@ document.getElementById("toggleSpeakers").addEventListener("click", function() {
 
 // ─── IFRAME AUTO-RESIZE ────────────────────────────────────────────────────
 function notifyHeight() {
-  const h = document.documentElement.scrollHeight;
+  // getBoundingClientRect reflects actual rendered height (shrinks on collapse);
+  // scrollHeight is sticky and won't shrink, causing leftover whitespace in the iframe.
+  const h = Math.ceil(document.body.getBoundingClientRect().height);
   if (window.parent !== window) window.parent.postMessage({ ggWidgetHeight: h }, "*");
 }
 notifyHeight();

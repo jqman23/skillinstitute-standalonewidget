@@ -1160,7 +1160,7 @@ function renderSpeakers() {
   const grid = document.getElementById("speakerGrid");
   grid.innerHTML = "";
 
-  getAllSpeakers().forEach(({ sp, session: s }) => {
+  getAllSpeakers().forEach(({ sp, session: s }, i) => {
     const sUtc = easternToUtc(s.startDate, s.startTime);
     const eUtc = easternToUtc(s.endDate,   s.endTime);
     const timeLabel = buildTimeLabel(sUtc, eUtc, tz);

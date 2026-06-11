@@ -10,7 +10,7 @@
 body {
   font-family: "Montserrat", sans-serif;
   -webkit-font-smoothing: antialiased;
-  background: #f4f6f9;
+  background: #fff;
   color: #111;
   min-height: 100vh;
 }
@@ -18,7 +18,7 @@ body {
 /* ── STICKY CONTROLS ────────────────────────────────────────────────────── */
 .controls-bar {
   background: #fff;
-  box-shadow: 0 2px 16px rgba(0,0,0,0.09);
+  border-bottom: 1px solid #ececec;
   position: sticky;
   top: 0;
   z-index: 100;
@@ -41,15 +41,15 @@ body {
 .tz-label {
   font-size: 0.78rem;
   font-weight: 700;
-  color: #122345;
+  color: #44403c;
   white-space: nowrap;
 }
 .tz-select {
   padding: 8px 11px;
   border-radius: 9px;
   border: none;
-  background: #f4f6f9;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  background: #f7f7f5;
+  box-shadow: none;
   font-family: "Montserrat", sans-serif;
   font-weight: 500;
   font-size: 0.82rem;
@@ -87,13 +87,13 @@ body {
 .slot-time {
   font-size: 1.05rem;
   font-weight: 700;
-  color: #122345;
+  color: #292524;
   white-space: nowrap;
 }
 .slot-tz-abbr {
   font-size: 0.8rem;
   font-weight: 600;
-  color: #187089;
+  color: #57534e;
 }
 .slot-badge {
   font-size: 0.7rem;
@@ -102,11 +102,11 @@ body {
   text-transform: uppercase;
   padding: 3px 10px;
   border-radius: 50px;
-  background: #edf7fa;
-  color: #187089;
+  background: #f2f1ee;
+  color: #57534e;
 }
-.slot-badge.green { background: #edf7ed; color: #4a8a4a; }
-.slot-badge.neutral { background: #f2f4f7; color: #888; }
+.slot-badge.green { background: #f2f1ee; color: #57534e; }
+.slot-badge.neutral { background: #f2f1ee; color: #888; }
 
 /* ── SESSION GRID ───────────────────────────────────────────────────────── */
 .session-grid {
@@ -125,12 +125,12 @@ body {
   display: flex;
   flex-direction: column;
 }
-.session-card:hover { transform: translateY(-3px); box-shadow: 0 12px 28px rgba(0,0,0,0.12); }
+.session-card:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(41,37,36,0.10); }
 .session-card.hidden { display: none; }
 
 .card-accent {
   height: 5px;
-  background: linear-gradient(90deg, #122345, #187089);
+  background: #d6d3d1;
 }
 
 .card-body { padding: 18px 20px 0; flex: 1; }
@@ -159,7 +159,7 @@ body {
 .card-title {
   font-size: 1.02rem;
   font-weight: 700;
-  color: #122345;
+  color: #292524;
   line-height: 1.3;
   margin-bottom: 10px;
 }
@@ -185,13 +185,13 @@ body {
   width: 34px;
   height: 34px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #122345, #187089);
+  background: #d6d3d1;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 0.65rem;
   font-weight: 700;
-  color: white;
+  color: #57534e;
   flex-shrink: 0;
   overflow: hidden;
 }
@@ -227,7 +227,7 @@ body {
   transform: translateY(0);
 }
 .speaker-info { font-size: 0.82rem; }
-.speaker-name { font-weight: 700; color: #122345; }
+.speaker-name { font-weight: 700; color: #292524; }
 .speaker-role { color: #666; font-size: 0.75rem; }
 
 .card-desc {
@@ -259,7 +259,7 @@ body {
   font-family: "Montserrat", sans-serif;
   font-size: 0.8rem;
   font-weight: 700;
-  color: #187089;
+  color: #57534e;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -267,7 +267,7 @@ body {
   padding: 0;
   transition: color .15s;
 }
-.expand-btn:hover { color: #122345; }
+.expand-btn:hover { color: #292524; }
 .expand-icon {
   display: inline-block;
   transition: transform .25s ease;
@@ -294,26 +294,26 @@ body {
 @media (max-width: 560px) { .objectives-grid { grid-template-columns: 1fr; } }
 
 .obj-block {
-  background: #f8fafb;
+  background: #fafaf9;
   border-radius: 10px;
   padding: 12px 14px;
-  border-left: 3px solid #122345;
+  border-left: 3px solid #d6d3d1;
 }
-.obj-block.teal { border-left-color: #187089; }
-.obj-block.green { border-left-color: #4a8a4a; }
-.obj-block.purple { border-left-color: #7040aa; }
+.obj-block.teal { border-left-color: #57534e; }
+.obj-block.green { border-left-color: #57534e; }
+.obj-block.purple { border-left-color: #57534e; }
 
 .obj-label {
   font-size: 0.65rem;
   font-weight: 800;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #122345;
+  color: #292524;
   margin-bottom: 4px;
 }
-.obj-block.teal .obj-label { color: #187089; }
-.obj-block.green .obj-label { color: #4a8a4a; }
-.obj-block.purple .obj-label { color: #7040aa; }
+.obj-block.teal .obj-label { color: #57534e; }
+.obj-block.green .obj-label { color: #57534e; }
+.obj-block.purple .obj-label { color: #57534e; }
 
 .obj-sublabel {
   font-size: 0.72rem;
@@ -341,7 +341,7 @@ body {
   position: absolute;
   left: 0;
   font-size: 0.7rem;
-  color: #187089;
+  color: #57534e;
   top: 1px;
 }
 
@@ -352,12 +352,12 @@ body {
   font-weight: 800;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #122345;
+  color: #292524;
   margin-bottom: 12px;
 }
 .bio-card {
-  background: linear-gradient(90deg, rgba(18,35,69,0.04) 0%, rgba(255,255,255,0) 40%);
-  border-left: 3px solid #122345;
+  background: #fafaf9;
+  border-left: 3px solid #d6d3d1;
   border-radius: 0 10px 10px 0;
   padding: 12px 14px;
   margin-bottom: 10px;
@@ -372,17 +372,17 @@ body {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #122345, #187089);
+  background: #d6d3d1;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 0.75rem;
   font-weight: 700;
-  color: white;
+  color: #57534e;
   flex-shrink: 0;
   overflow: hidden;
 }
-.bio-name { font-size: 0.88rem; font-weight: 700; color: #122345; }
+.bio-name { font-size: 0.88rem; font-weight: 700; color: #292524; }
 .bio-title-org { font-size: 0.75rem; color: #666; }
 .bio-text {
   font-size: 0.79rem;
@@ -401,7 +401,7 @@ body {
   font-family: "Montserrat", sans-serif;
   font-size: 0.72rem;
   font-weight: 700;
-  color: #187089;
+  color: #57534e;
   cursor: pointer;
   margin-top: 5px;
   padding: 0;
@@ -419,7 +419,7 @@ body {
 .empty-state p { font-size: 0.95rem; font-weight: 600; }
 
 /* ── TIME CATEGORY STRIP ────────────────────────────────────────────────── */
-.slot-section.evening .slot-time { color: #187089; }
+.slot-section.evening .slot-time { color: #57534e; }
 .slot-section.neutral .slot-time { color: #666; }
 
 /* ── RESPONSIVE ─────────────────────────────────────────────────────────── */
@@ -1415,7 +1415,7 @@ function render() {
     section.className = `slot-section ${cat}`;
 
     // Slot header
-    const catBadge = cat === "daytime" ? `<span class="slot-badge green">Daytime hours</span>` :
+    const catBadge = cat === "daytime" ? `<span class="slot-badge">Daytime hours</span>` :
                      cat === "evening" ? `<span class="slot-badge">Evening hours</span>` :
                      `<span class="slot-badge neutral">Off-hours</span>`;
     section.innerHTML = `
@@ -1480,7 +1480,7 @@ function render() {
         <div class="card-body">
           <div class="card-tags">${tagsHtml}</div>
           <div class="card-title">${s.title}</div>
-          <div style="font-size:0.82rem;font-weight:600;color:#187089;margin-bottom:12px;line-height:1.3;">${s.subtitle}</div>
+          <div style="font-size:0.82rem;font-weight:600;color:#57534e;margin-bottom:12px;line-height:1.3;">${s.subtitle}</div>
           <div class="card-speakers">${speakerLines}</div>
           <div class="card-desc">${s.description}</div>
         </div>

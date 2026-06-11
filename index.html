@@ -1177,30 +1177,34 @@ function downloadPDF(code) {
   const sUtc      = easternToUtc(s.startDate, s.startTime);
   const eUtc      = easternToUtc(s.endDate,   s.endTime);
   const timeLabel = buildTimeLabel(sUtc, eUtc, tz);
-  const dateLabel = sUtc.toLocaleDateString("en-US", { weekday:"long", month:"long", day:"numeric", year:"numeric", timeZone:tz });
+  const dateLabel = sUtc.toLocaleDateString("en-US", { weekday:"long", month:"long", day:"numeric", timeZone:tz });
 
-  const objColors = { why:"#f5f5f5", how:"#e8f4f8", practice:"#edf7ed", transfer:"#f3eef8" };
+  const BANNER = "https://custom.cvent.com/AE944F71438646268B70FF5BF3772347/files/event/e7d15afcf2b14901ab0272ce8a401899/4c40728a45af4e0289e8075b9759c684.png";
+
+  // Left-bar accent colors per objective category
+  const objAccent = { why:["#888","#fafafa"], how:["#187089","#f0f7f9"], practice:["#3d8a3d","#f0f7f0"], transfer:["#7c4dbd","#f5f0fc"] };
   const objHtml = ["why","how","practice","transfer"].map(k => {
     const o = s.objectives[k];
-    return `<div style="background:${objColors[k]};border-radius:8px;padding:12px 14px;break-inside:avoid;">
-      <div style="font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#122345;margin-bottom:2px;">${o.label}</div>
-      <div style="font-size:0.62rem;color:#666;margin-bottom:7px;">${o.sub}</div>
-      <ul style="margin:0;padding-left:14px;">${o.items.map(it=>`<li style="font-size:0.7rem;color:#333;line-height:1.5;margin-bottom:3px;">${it}</li>`).join("")}</ul>
+    const [border, bg] = objAccent[k];
+    return `<div style="background:${bg};border-left:3px solid ${border};padding:11px 13px;break-inside:avoid;">
+      <div style="font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#122345;margin-bottom:1px;">${o.label}</div>
+      <div style="font-size:0.6rem;color:#777;margin-bottom:7px;">${o.sub}</div>
+      <ul style="margin:0;padding-left:13px;">${o.items.map(it=>`<li style="font-size:0.69rem;color:#333;line-height:1.5;margin-bottom:3px;">${it}</li>`).join("")}</ul>
     </div>`;
   }).join("");
 
   const speakersHtml = s.speakers.map(sp => {
     const photoHtml = sp.photo
-      ? `<img src="${sp.photo}" style="width:54px;height:54px;border-radius:50%;object-fit:cover;border:2px solid #e8eaed;flex-shrink:0;">`
-      : `<div style="width:54px;height:54px;border-radius:50%;background:#e8eaed;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.2rem;font-weight:700;color:#999;">${(sp.name||"?")[0]}</div>`;
+      ? `<img src="${sp.photo}" style="width:52px;height:52px;border-radius:50%;object-fit:cover;border:2px solid #e8eaed;flex-shrink:0;">`
+      : `<div style="width:52px;height:52px;border-radius:50%;background:#e8eaed;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:700;color:#999;">${(sp.name||"?")[0]}</div>`;
     const bioHtml = (sp.bio||"").replace(/\n\n/g,"<br><br>").replace(/\n/g,"<br>");
-    return `<div style="display:flex;gap:14px;margin-bottom:20px;align-items:flex-start;break-inside:avoid;">
+    return `<div style="display:flex;gap:14px;margin-bottom:18px;align-items:flex-start;break-inside:avoid;">
       ${photoHtml}
       <div style="flex:1;">
-        <div style="font-weight:700;color:#122345;font-size:0.85rem;line-height:1.25;">${sp.name}</div>
-        ${sp.title?`<div style="color:#187089;font-size:0.72rem;font-weight:600;margin-top:2px;">${sp.title}</div>`:""}
-        ${sp.org?`<div style="color:#888;font-size:0.68rem;margin-top:1px;">${sp.org}</div>`:""}
-        ${sp.bio?`<div style="color:#444;font-size:0.72rem;line-height:1.6;margin-top:7px;">${bioHtml}</div>`:""}
+        <div style="font-weight:700;color:#122345;font-size:0.84rem;line-height:1.25;">${sp.name}</div>
+        ${sp.title?`<div style="color:#187089;font-size:0.71rem;font-weight:600;margin-top:2px;">${sp.title}</div>`:""}
+        ${sp.org?`<div style="color:#888;font-size:0.67rem;margin-top:1px;">${sp.org}</div>`:""}
+        ${sp.bio?`<div style="color:#444;font-size:0.71rem;line-height:1.6;margin-top:7px;">${bioHtml}</div>`:""}
       </div>
     </div>`;
   }).join("");
@@ -1209,58 +1213,59 @@ function downloadPDF(code) {
 <html>
 <head>
   <meta charset="utf-8">
-  <title>${s.title} — A Global Gathering 2026</title>
+  <title>${s.title}</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     *{box-sizing:border-box;margin:0;padding:0;}
-    body{font-family:'Montserrat',sans-serif;color:#222;background:#fff;padding:40px 48px;}
+    body{font-family:'Montserrat',sans-serif;color:#222;background:#fff;}
+    .content{padding:22px 40px 40px;}
     @media print{
-      @page{size:letter;margin:0.45in 0.5in;}
-      body{padding:0;}
-      .no-print{display:none!important;}
+      @page{size:letter;margin:0;}
+      body{background:#fff;}
     }
-    .section-label{font-size:0.62rem;font-weight:700;color:#187089;text-transform:uppercase;letter-spacing:0.06em;border-bottom:1.5px solid #e8eaed;padding-bottom:5px;margin-bottom:12px;}
+    .section-label{font-size:0.6rem;font-weight:700;color:#187089;text-transform:uppercase;letter-spacing:0.06em;border-bottom:1.5px solid #e8eaed;padding-bottom:4px;margin-bottom:11px;}
   </style>
 </head>
 <body>
-  <div class="no-print" style="text-align:right;margin-bottom:20px;">
-    <button onclick="window.print()" style="background:#187089;color:#fff;border:none;padding:9px 22px;border-radius:8px;font-family:'Montserrat',sans-serif;font-size:0.78rem;font-weight:700;cursor:pointer;letter-spacing:0.02em;">Save as PDF</button>
-  </div>
-
-  <div style="border-top:4px solid #187089;padding-top:16px;margin-bottom:22px;">
-    <div style="font-size:0.6rem;font-weight:700;color:#187089;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:7px;">A Global Gathering 2026 · Skill Building Institute</div>
-    <div style="font-size:1.4rem;font-weight:700;color:#122345;line-height:1.2;margin-bottom:5px;">${s.title}</div>
-    <div style="font-size:0.85rem;font-weight:600;color:#187089;margin-bottom:12px;">${s.subtitle}</div>
-    <div style="display:inline-flex;align-items:center;gap:6px;background:#122345;color:#fff;border-radius:50px;padding:4px 13px;font-size:0.68rem;font-weight:700;margin-bottom:10px;">
-      ${dateLabel} &nbsp;·&nbsp; ${timeLabel}${abbr ? " " + abbr : ""}
-    </div><br>
-    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;">
-      ${s.tagLabels.map(t=>`<span style="font-size:0.58rem;font-weight:700;background:#f0f2f5;color:#666;border-radius:4px;padding:2px 8px;text-transform:uppercase;letter-spacing:0.03em;">${t}</span>`).join("")}
+  <img src="${BANNER}" style="width:100%;display:block;" alt="A Global Gathering for the Future of Child Welfare">
+  <div class="content">
+    <div style="margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid #e8eaed;">
+      <div style="font-size:0.58rem;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:6px;">Skill Building Institute</div>
+      <div style="font-size:1.35rem;font-weight:700;color:#122345;line-height:1.2;margin-bottom:4px;">${s.title}</div>
+      <div style="font-size:0.83rem;font-weight:600;color:#187089;margin-bottom:10px;">${s.subtitle}</div>
+      <div style="font-size:0.74rem;font-weight:600;color:#555;">${dateLabel} &nbsp;·&nbsp; ${timeLabel}${abbr ? " " + abbr : ""}</div>
     </div>
-  </div>
 
-  <div class="section-label">About This Session</div>
-  <div style="font-size:0.8rem;line-height:1.65;color:#333;margin-bottom:22px;">${s.description}</div>
+    <div class="section-label">About This Session</div>
+    <div style="font-size:0.79rem;line-height:1.65;color:#333;margin-bottom:20px;">${s.description}</div>
 
-  <div class="section-label">Learning Objectives</div>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:26px;">${objHtml}</div>
+    <div class="section-label">Learning Objectives</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:22px;">${objHtml}</div>
 
-  <div style="border-top:1.5px solid #e8eaed;padding-top:18px;">
     <div class="section-label">Presenters</div>
     ${speakersHtml}
   </div>
-
-  <div class="no-print" style="text-align:center;margin-top:28px;color:#ccc;font-size:0.65rem;letter-spacing:0.03em;">A GLOBAL GATHERING 2026</div>
-
-  <script>window.onload=function(){setTimeout(window.print,800);};<\/script>
 </body>
 </html>`;
 
-  const win = window.open("", "_blank");
-  if (!win) { alert("Please allow popups to generate the PDF."); return; }
-  win.document.write(html);
-  win.document.close();
+  // Print via hidden iframe so user stays on current tab
+  const iframe = document.createElement("iframe");
+  iframe.style.cssText = "position:fixed;top:-9999px;left:-9999px;width:850px;height:1100px;border:none;opacity:0;pointer-events:none;";
+  document.body.appendChild(iframe);
+  const doc = iframe.contentDocument || iframe.contentWindow.document;
+  doc.open(); doc.write(html); doc.close();
+
+  const imgs = Array.from(doc.querySelectorAll("img"));
+  const ready = imgs.length === 0 ? Promise.resolve()
+    : Promise.all(imgs.map(img => img.complete ? Promise.resolve()
+        : new Promise(r => { img.onload = r; img.onerror = r; })));
+
+  ready.then(() => setTimeout(() => {
+    iframe.contentWindow.focus();
+    iframe.contentWindow.print();
+    setTimeout(() => { try { document.body.removeChild(iframe); } catch(e){} }, 3000);
+  }, 400));
 }
 
 // ─── TOOLTIP ───────────────────────────────────────────────────────────────

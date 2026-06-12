@@ -71,6 +71,7 @@ body {
 }
 .filter-toggle:hover { border-color: #122345; color: #122345; }
 .filter-toggle.active { background: #122345; color: #fff; border-color: #122345; }
+.filter-toggle:disabled { opacity: 0.35; cursor: not-allowed; pointer-events: none; }
 
 /* ── SPEAKER VIEW BUTTON ────────────────────────────────────────────────── */
 .view-toggle {
@@ -1432,6 +1433,14 @@ function hideSessionPopup() { sessionPopup.style.display = "none"; }
 document.getElementById("toggleSpeakers").addEventListener("click", function() {
   speakerViewActive = !speakerViewActive;
   this.classList.toggle("active", speakerViewActive);
+  const filterBtn = document.getElementById("filterDayEve");
+  if (speakerViewActive) {
+    // deselect and disable the daytime/evening filter
+    if (showDayEveOnly) { showDayEveOnly = false; filterBtn.classList.remove("active"); }
+    filterBtn.disabled = true;
+  } else {
+    filterBtn.disabled = false;
+  }
   this.querySelector("span") && (this.querySelector("span").textContent = "");
   // update button label
   this.innerHTML = `

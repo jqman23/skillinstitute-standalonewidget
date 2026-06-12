@@ -1170,15 +1170,6 @@ function navigateToSession(code) {
   });
 }
 
-function loadHtml2Pdf() {
-  if (window.html2pdf) return Promise.resolve();
-  return new Promise((res, rej) => {
-    const sc = document.createElement("script");
-    sc.src = "https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js";
-    sc.onload = res; sc.onerror = rej;
-    document.head.appendChild(sc);
-  });
-}
 
 function downloadPDF(code) {
   const s = sessions.find(x => x.code === code);
@@ -1205,8 +1196,9 @@ function downloadPDF(code) {
   }).join("");
 
   const speakersHtml = s.speakers.map(sp => {
+    // No crossorigin attr — images load normally inside the isolated iframe document
     const photoHtml = sp.photo
-      ? `<img src="${sp.photo}" crossorigin="anonymous" style="width:50px;height:50px;border-radius:50%;object-fit:cover;border:2px solid #e8eaed;flex-shrink:0;">`
+      ? `<img src="${sp.photo}" style="width:50px;height:50px;border-radius:50%;object-fit:cover;border:2px solid #e8eaed;flex-shrink:0;">`
       : `<div style="width:50px;height:50px;border-radius:50%;background:#e8eaed;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:#999;">${(sp.name||"?")[0]}</div>`;
     const bioHtml = (sp.bio||"").replace(/\n\n/g,"<br><br>").replace(/\n/g,"<br>");
     return `<div style="display:flex;gap:13px;margin-bottom:16px;align-items:flex-start;">
@@ -1220,50 +1212,64 @@ function downloadPDF(code) {
     </div>`;
   }).join("");
 
-  // Element must be at real, positive coordinates — html2canvas respects CSS overflow
-  // clipping so any wrapper trick that clips to 0x0 produces a blank PDF.
-  // We render it fixed at top-left (briefly visible during generation) then remove it.
-  const el = document.createElement("div");
-  el.style.cssText = "position:fixed;top:0;left:0;z-index:99999;width:816px;background:#fff;font-family:'Montserrat',Arial,sans-serif;pointer-events:none;";
-  el.innerHTML = `
-    <img src="${BANNER}" crossorigin="anonymous" style="width:100%;display:block;" alt="">
-    <div style="padding:20px 38px 36px;">
-      <div style="margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid #e8eaed;">
-        <div style="font-size:7.5px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:5px;">Skill Building Institute</div>
-        <div style="font-size:20px;font-weight:700;color:#122345;line-height:1.2;margin-bottom:3px;">${s.title}</div>
-        <div style="font-size:12px;font-weight:600;color:#187089;margin-bottom:8px;">${s.subtitle}</div>
-        <div style="font-size:10px;font-weight:600;color:#555;">${dateLabel} &nbsp;·&nbsp; ${timeLabel}${abbr?" "+abbr:""}</div>
-      </div>
-      <div style="${SL}">About This Session</div>
-      <div style="font-size:10px;line-height:1.65;color:#333;margin-bottom:16px;">${s.description}</div>
-      <div style="${SL}">Learning Objectives</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;">${objHtml}</div>
-    </div>
-    <div style="page-break-before:always;padding:20px 38px 36px;">
-      <div style="${SL}">Presenters</div>
-      ${speakersHtml}
-    </div>`;
-
-  document.body.appendChild(el);
-
   const filename = s.title.replace(/[^a-z0-9 ]/gi,"").trim().replace(/\s+/g,"-").toLowerCase()+".pdf";
 
-  // Wait for all images to load before html2canvas captures the element
-  const imgEls = Array.from(el.querySelectorAll("img"));
+  // Build a full standalone HTML doc and write it into a hidden iframe.
+  // html2pdf then runs INSIDE that iframe on its own body — same-origin capture,
+  // no cross-origin canvas taint, no off-screen positioning hacks needed.
+  const iframeDoc = `<!DOCTYPE html><html><head><meta charset="utf-8">
+<style>*{box-sizing:border-box;margin:0;padding:0;}body{font-family:Arial,Helvetica,sans-serif;background:#fff;width:816px;}</style>
+</head><body>
+<img src="${BANNER}" style="width:100%;display:block;" alt="">
+<div style="padding:20px 38px 36px;">
+  <div style="margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid #e8eaed;">
+    <div style="font-size:7.5px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:5px;">Skill Building Institute</div>
+    <div style="font-size:20px;font-weight:700;color:#122345;line-height:1.2;margin-bottom:3px;">${s.title}</div>
+    <div style="font-size:12px;font-weight:600;color:#187089;margin-bottom:8px;">${s.subtitle}</div>
+    <div style="font-size:10px;font-weight:600;color:#555;">${dateLabel} &nbsp;&middot;&nbsp; ${timeLabel}${abbr?" "+abbr:""}</div>
+  </div>
+  <div style="${SL}">About This Session</div>
+  <div style="font-size:10px;line-height:1.65;color:#333;margin-bottom:16px;">${s.description}</div>
+  <div style="${SL}">Learning Objectives</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:0;">${objHtml}</div>
+</div>
+<div style="page-break-before:always;padding:20px 38px 36px;">
+  <div style="${SL}">Presenters</div>
+  ${speakersHtml}
+</div>
+</body></html>`;
+
+  const iframe = document.createElement("iframe");
+  iframe.style.cssText = "position:fixed;top:0;left:0;width:816px;height:1100px;border:none;opacity:0.01;pointer-events:none;z-index:99999;";
+  document.body.appendChild(iframe);
+
+  const iDoc = iframe.contentDocument || iframe.contentWindow.document;
+  iDoc.open(); iDoc.write(iframeDoc); iDoc.close();
+
+  // Wait for images inside the iframe to load
+  const imgEls = Array.from(iDoc.querySelectorAll("img"));
   const imgReady = imgEls.map(img => img.complete
     ? Promise.resolve()
     : new Promise(r => { img.onload = r; img.onerror = r; })
   );
 
-  Promise.all(imgReady).then(() => loadHtml2Pdf()).then(() => html2pdf().set({
-    margin: 0,
-    filename,
-    image: { type: "jpeg", quality: 0.97 },
-    html2canvas: { scale: 2, useCORS: true, logging: false, windowWidth: 816 },
-    jsPDF: { unit: "mm", format: "letter", orientation: "portrait" },
-    pagebreak: { mode: ["css","legacy"] }
-  }).from(el).save()).finally(() => {
-    try { document.body.removeChild(el); } catch(e) {}
+  // Then inject html2pdf into the iframe and run it on the iframe's own body
+  Promise.all(imgReady).then(() => new Promise((res, rej) => {
+    const sc = iDoc.createElement("script");
+    sc.src = "https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js";
+    sc.onload = res; sc.onerror = rej;
+    iDoc.head.appendChild(sc);
+  })).then(() => {
+    return iframe.contentWindow.html2pdf().set({
+      margin: 0,
+      filename,
+      image: { type: "jpeg", quality: 0.97 },
+      html2canvas: { scale: 2, useCORS: true, logging: false },
+      jsPDF: { unit: "mm", format: "letter", orientation: "portrait" },
+      pagebreak: { mode: ["css","legacy"] }
+    }).from(iDoc.body).save();
+  }).finally(() => {
+    setTimeout(() => { try { document.body.removeChild(iframe); } catch(e) {} }, 1500);
   });
 }
 

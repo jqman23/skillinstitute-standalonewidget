@@ -1222,7 +1222,7 @@ function downloadPDF(code) {
 
   // Build element off-screen (816px = 8.5in at 96dpi)
   const el = document.createElement("div");
-  el.style.cssText = "position:fixed;top:-99999px;left:0;width:816px;background:#fff;font-family:'Montserrat',Arial,sans-serif;";
+  el.style.cssText = "position:absolute;left:-9999px;top:0;width:816px;background:#fff;font-family:'Montserrat',Arial,sans-serif;";
   el.innerHTML = `
     <img src="${BANNER}" crossorigin="anonymous" style="width:100%;display:block;" alt="">
     <div style="padding:20px 38px 36px;">

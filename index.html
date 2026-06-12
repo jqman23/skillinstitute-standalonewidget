@@ -1220,13 +1220,11 @@ function downloadPDF(code) {
     </div>`;
   }).join("");
 
-  // Build element — must be visible in DOM for html2canvas to capture it.
-  // We clip it to 0x0 visually via a wrapper so it never flashes on screen.
-  const wrapper = document.createElement("div");
-  wrapper.style.cssText = "position:fixed;top:0;left:0;width:0;height:0;overflow:hidden;z-index:99999;";
-
+  // Element must be at real, positive coordinates — html2canvas respects CSS overflow
+  // clipping so any wrapper trick that clips to 0x0 produces a blank PDF.
+  // We render it fixed at top-left (briefly visible during generation) then remove it.
   const el = document.createElement("div");
-  el.style.cssText = "position:absolute;top:0;left:0;width:816px;background:#fff;font-family:'Montserrat',Arial,sans-serif;";
+  el.style.cssText = "position:fixed;top:0;left:0;z-index:99999;width:816px;background:#fff;font-family:'Montserrat',Arial,sans-serif;pointer-events:none;";
   el.innerHTML = `
     <img src="${BANNER}" crossorigin="anonymous" style="width:100%;display:block;" alt="">
     <div style="padding:20px 38px 36px;">
@@ -1246,8 +1244,7 @@ function downloadPDF(code) {
       ${speakersHtml}
     </div>`;
 
-  wrapper.appendChild(el);
-  document.body.appendChild(wrapper);
+  document.body.appendChild(el);
 
   const filename = s.title.replace(/[^a-z0-9 ]/gi,"").trim().replace(/\s+/g,"-").toLowerCase()+".pdf";
 
@@ -1262,11 +1259,11 @@ function downloadPDF(code) {
     margin: 0,
     filename,
     image: { type: "jpeg", quality: 0.97 },
-    html2canvas: { scale: 2, useCORS: true, allowTaint: false, logging: false, windowWidth: 816 },
+    html2canvas: { scale: 2, useCORS: true, logging: false, windowWidth: 816 },
     jsPDF: { unit: "mm", format: "letter", orientation: "portrait" },
     pagebreak: { mode: ["css","legacy"] }
   }).from(el).save()).finally(() => {
-    try { document.body.removeChild(wrapper); } catch(e) {}
+    try { document.body.removeChild(el); } catch(e) {}
   });
 }
 

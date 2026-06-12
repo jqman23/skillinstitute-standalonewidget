@@ -1220,9 +1220,13 @@ function downloadPDF(code) {
     </div>`;
   }).join("");
 
-  // Build element off-screen (816px = 8.5in at 96dpi)
+  // Build element — must be visible in DOM for html2canvas to capture it.
+  // We clip it to 0x0 visually via a wrapper so it never flashes on screen.
+  const wrapper = document.createElement("div");
+  wrapper.style.cssText = "position:fixed;top:0;left:0;width:0;height:0;overflow:hidden;z-index:99999;";
+
   const el = document.createElement("div");
-  el.style.cssText = "position:absolute;left:-9999px;top:0;width:816px;background:#fff;font-family:'Montserrat',Arial,sans-serif;";
+  el.style.cssText = "position:absolute;top:0;left:0;width:816px;background:#fff;font-family:'Montserrat',Arial,sans-serif;";
   el.innerHTML = `
     <img src="${BANNER}" crossorigin="anonymous" style="width:100%;display:block;" alt="">
     <div style="padding:20px 38px 36px;">
@@ -1242,19 +1246,27 @@ function downloadPDF(code) {
       ${speakersHtml}
     </div>`;
 
-  document.body.appendChild(el);
+  wrapper.appendChild(el);
+  document.body.appendChild(wrapper);
 
   const filename = s.title.replace(/[^a-z0-9 ]/gi,"").trim().replace(/\s+/g,"-").toLowerCase()+".pdf";
 
-  loadHtml2Pdf().then(() => html2pdf().set({
+  // Wait for all images to load before html2canvas captures the element
+  const imgEls = Array.from(el.querySelectorAll("img"));
+  const imgReady = imgEls.map(img => img.complete
+    ? Promise.resolve()
+    : new Promise(r => { img.onload = r; img.onerror = r; })
+  );
+
+  Promise.all(imgReady).then(() => loadHtml2Pdf()).then(() => html2pdf().set({
     margin: 0,
     filename,
     image: { type: "jpeg", quality: 0.97 },
-    html2canvas: { scale: 2, useCORS: true, logging: false },
+    html2canvas: { scale: 2, useCORS: true, allowTaint: false, logging: false, windowWidth: 816 },
     jsPDF: { unit: "mm", format: "letter", orientation: "portrait" },
     pagebreak: { mode: ["css","legacy"] }
   }).from(el).save()).finally(() => {
-    try { document.body.removeChild(el); } catch(e) {}
+    try { document.body.removeChild(wrapper); } catch(e) {}
   });
 }
 

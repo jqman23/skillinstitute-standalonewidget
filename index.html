@@ -1194,15 +1194,43 @@ function navigateToSession(code) {
 function shareLinkedIn(code) {
   const s = sessions.find(x => x.code === code);
   if (!s) return;
-  const pageUrl = "https://www.futureofchildwelfare.org";
+
+  const dateObj = new Date(s.startDate + "T12:00:00");
+  const dateStr = dateObj.toLocaleDateString("en-US", { weekday:"long", month:"long", day:"numeric", year:"numeric" });
+  const fmtTime = t => { const [h,m] = t.split(":"); const hr = +h % 12 || 12; return hr + (m !== "00" ? ":"+m : "") + (+h < 12 ? " AM" : " PM"); };
+  const timeStr = fmtTime(s.startTime) + " – " + fmtTime(s.endTime) + " PDT";
   const title = s.title + (s.subtitle ? ": " + s.subtitle : "");
   const descText = (s.description || "").replace(/<[^>]*>/g, "").trim();
-  const summary = "Excited to attend \"" + title + "\" at the 2026 Global Gathering for the Future of Child Welfare. " + descText.slice(0, 200) + (descText.length > 200 ? "..." : "") + " #ChildWelfare #FutureOfChildWelfare";
-  const url = "https://www.linkedin.com/shareArticle?mini=true" +
-    "&url=" + encodeURIComponent(pageUrl) +
-    "&title=" + encodeURIComponent(title) +
-    "&summary=" + encodeURIComponent(summary);
-  window.open(url, "_blank", "width=600,height=600,noopener,noreferrer");
+  const firstSentence = descText.match(/^[^.!?]+[.!?]/)?.[0] || descText.slice(0, 180);
+  const tags = (s.tagLabels || []).map(t => "#" + t.replace(/\s+/g, "")).join(" ");
+
+  const post = `I'm looking forward to attending "${title}" at the 2026 Global Gathering for the Future of Child Welfare! 🌟
+
+${firstSentence}
+
+📅 ${dateStr}
+⏰ ${timeStr}
+
+Learn more and register: https://www.futureofchildwelfare.org
+
+${tags} #FutureOfChildWelfare #ChildWelfare #SocialWork #ChildWelfareReform`;
+
+  navigator.clipboard.writeText(post).catch(() => {
+    const ta = document.createElement("textarea");
+    ta.value = post; ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta); ta.select(); document.execCommand("copy");
+    document.body.removeChild(ta);
+  });
+
+  const btn = document.querySelector(`.linkedin-btn[onclick="shareLinkedIn('${code}')"]`);
+  if (btn) {
+    const orig = btn.innerHTML;
+    btn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> Copied!`;
+    btn.style.color = "#187089";
+    setTimeout(() => { btn.innerHTML = orig; btn.style.color = ""; }, 2500);
+  }
+
+  window.open("https://www.linkedin.com/feed/", "_blank", "noopener,noreferrer");
 }
 
 function downloadPDF(code) {

@@ -1249,7 +1249,7 @@ function shareLinkedIn(code) {
   const firstSentence = descText.match(/^[^.!?]+[.!?]/)?.[0] || descText.slice(0, 180);
   const tags = (s.tagLabels || []).map(t => "#" + t.replace(/\s+/g, "")).join(" ");
 
-  const post = `I'm looking forward to attending "${title}" at the 2026 Global Gathering for the Future of Child Welfare! 🌟\n\n${firstSentence}\n\n📅 ${dateStr}\n⏰ ${timeStr}\n\nLearn more and register: https://www.futureofchildwelfare.org\n\n${tags} #FutureOfChildWelfare #ChildWelfare #SocialWork #ChildWelfareReform`;
+  const post = `I'm looking forward to attending the Skill Building Institute, "${title}" at the 2026 Global Gathering for the Future of Child Welfare! 🌟\n\n${descText}\n\n📅 ${dateStr}\n⏰ ${timeStr}\n\nLearn more and register: https://www.futureofchildwelfare.org\n\n${tags} #FutureOfChildWelfare #ChildWelfare #SocialWork`;
 
   // Build modal
   const overlay = document.createElement("div");

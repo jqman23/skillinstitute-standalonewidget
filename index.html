@@ -1506,29 +1506,23 @@ function buildSessionPages(s, tz, firstPageBreak) {
 const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
   || (navigator.maxTouchPoints > 1 && /Macintosh/.test(navigator.userAgent));
 
-// Deliver a PDF Blob to the user.
-//   Desktop: download `filename` directly via an <a download> on the TOP-LEVEL
-//   document (mobile browsers block downloads that originate in the render
-//   iframe, and a background download doesn't actually show the file anyway).
-//   Mobile: open the PDF so the user lands ON the file — the browser's built-in
-//   viewer then offers Save/Share — instead of a silent background download.
+// Download a PDF Blob as `filename`. The <a download> click is fired from the
+// TOP-LEVEL document (not the render iframe): mobile browsers block downloads
+// that originate inside an iframe, which is why html2pdf's own .save() silently
+// did nothing on phones. This downloads the file on both desktop and mobile —
+// it never navigates the user away to view it.
 function saveBlob(blob, filename) {
   const url = URL.createObjectURL(blob);
 
-  if (isMobile) {
-    const win = window.open(url, "_blank");
-    if (!win) window.location.href = url; // popup blocked → show it inline
-  } else {
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = filename;
-    a.rel = "noopener";
-    document.body.appendChild(a);
-    a.click();
-    setTimeout(() => { try { document.body.removeChild(a); } catch(e) {} }, 0);
-  }
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  a.rel = "noopener";
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => { try { document.body.removeChild(a); } catch(e) {} }, 0);
 
-  // Keep the object URL alive long enough for the download/new tab to grab it.
+  // Keep the object URL alive long enough for the download to grab it.
   setTimeout(() => { try { URL.revokeObjectURL(url); } catch(e) {} }, 60000);
 }
 

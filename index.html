@@ -1758,11 +1758,21 @@ function renderSpeakers() {
 
     // Session popup on hover of the tag button
     const tagBtn = card.querySelector(".sp-session-tag");
-    tagBtn.addEventListener("mouseenter", e => { cancelHidePopup(); showSessionPopup(s, tagBtn, tz, abbr); });
-    tagBtn.addEventListener("mouseleave", scheduleHidePopup);
-    tagBtn.addEventListener("focus",      e => { cancelHidePopup(); showSessionPopup(s, tagBtn, tz, abbr); });
-    tagBtn.addEventListener("blur",       scheduleHidePopup);
-    tagBtn.addEventListener("click",      () => navigateToSession(s.code));
+    if (isTouchMode()) {
+      // Touch devices can't hover and the auto-jump to the session works
+      // poorly there, so a tap just opens the info popup — it never navigates.
+      tagBtn.addEventListener("click", e => {
+        e.preventDefault();
+        cancelHidePopup();
+        showSessionPopup(s, tagBtn, tz, abbr);
+      });
+    } else {
+      tagBtn.addEventListener("mouseenter", e => { cancelHidePopup(); showSessionPopup(s, tagBtn, tz, abbr); });
+      tagBtn.addEventListener("mouseleave", scheduleHidePopup);
+      tagBtn.addEventListener("focus",      e => { cancelHidePopup(); showSessionPopup(s, tagBtn, tz, abbr); });
+      tagBtn.addEventListener("blur",       scheduleHidePopup);
+      tagBtn.addEventListener("click",      () => navigateToSession(s.code));
+    }
 
     grid.appendChild(card);
   });
@@ -1781,10 +1791,33 @@ function cancelHidePopup()   { clearTimeout(_popupHideTimer); }
 sessionPopup.addEventListener("mouseenter", cancelHidePopup);
 sessionPopup.addEventListener("mouseleave", scheduleHidePopup);
 
+// Devices that can't hover (phones/tablets) get tap-to-open popups instead of
+// hover, and the session tag never auto-jumps to the session.
+function isTouchMode() {
+  return isMobile || (window.matchMedia && window.matchMedia("(hover: none), (pointer: coarse)").matches);
+}
+
+// On touch there's no mouseleave to close the popup (and no longer a navigation
+// that hides it), so dismiss it when the user taps anywhere outside the popup
+// or a session tag.
+document.addEventListener("click", e => {
+  if (sessionPopup.style.display !== "block") return;
+  if (e.target.closest("#sessionPopup") || e.target.closest(".sp-session-tag")) return;
+  hideSessionPopup();
+});
+
 function showSessionPopup(s, anchor, tz, abbr) {
   const sUtc = easternToUtc(s.startDate, s.startTime);
   const eUtc = easternToUtc(s.endDate,   s.endTime);
-  document.getElementById("spViewBtn").onclick = () => navigateToSession(s.code);
+  // "View full details" jumps to the session card — hidden on touch, where
+  // that navigation behaves poorly and the popup is the full experience.
+  const viewBtn = document.getElementById("spViewBtn");
+  if (isTouchMode()) {
+    viewBtn.style.display = "none";
+  } else {
+    viewBtn.style.display = "";
+    viewBtn.onclick = () => navigateToSession(s.code);
+  }
   document.getElementById("spTitle").textContent    = s.title;
   document.getElementById("spSubtitle").textContent = s.subtitle;
   document.getElementById("spTime").textContent     = buildTimeLabel(sUtc, eUtc, tz) + (abbr ? " " + abbr : "");

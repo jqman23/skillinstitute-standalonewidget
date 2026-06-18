@@ -1505,23 +1505,19 @@ function buildSessionPages(s, tz, firstPageBreak) {
 
 const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
   || (navigator.maxTouchPoints > 1 && /Macintosh/.test(navigator.userAgent));
-const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent)
-  || (navigator.maxTouchPoints > 1 && /Macintosh/.test(navigator.userAgent));
 
-// Save a Blob as `filename`. The download is triggered from the TOP-LEVEL
-// document (not the render iframe): mobile browsers — iOS Safari and Android
-// Chrome especially — block downloads that originate inside an iframe, which is
-// why html2pdf's own .save() silently did nothing on phones. iOS also ignores
-// the `download` attribute, so there we open the PDF in a new tab and let the
-// native viewer offer Save/Share.
+// Deliver a PDF Blob to the user.
+//   Desktop: download `filename` directly via an <a download> on the TOP-LEVEL
+//   document (mobile browsers block downloads that originate in the render
+//   iframe, and a background download doesn't actually show the file anyway).
+//   Mobile: open the PDF so the user lands ON the file — the browser's built-in
+//   viewer then offers Save/Share — instead of a silent background download.
 function saveBlob(blob, filename) {
   const url = URL.createObjectURL(blob);
 
-  if (isIOS) {
-    // window.open after async work is usually allowed for blob: URLs; if the
-    // browser blocks the popup, fall back to navigating the current tab.
+  if (isMobile) {
     const win = window.open(url, "_blank");
-    if (!win) window.location.href = url;
+    if (!win) window.location.href = url; // popup blocked → show it inline
   } else {
     const a = document.createElement("a");
     a.href = url;
@@ -1578,6 +1574,13 @@ function renderHtmlToPdf(bodyHtml, filename) {
       jsPDF: { unit: "mm", format: "letter", orientation: "portrait" },
       pagebreak: { mode: ["css","legacy"] }
     }).from(iDoc.body).outputPdf("blob");
+  }).then(blob => {
+    // The Blob is created by the iframe's jsPDF; re-wrap it into a Blob owned
+    // by THIS document so its object URL stays valid after the iframe is torn
+    // down — on mobile the new-tab load can outlast the iframe otherwise.
+    return blob.arrayBuffer
+      ? blob.arrayBuffer().then(buf => new Blob([buf], { type: "application/pdf" }))
+      : blob;
   }).then(blob => {
     saveBlob(blob, filename);
   }).finally(() => {

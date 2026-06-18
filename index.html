@@ -1566,9 +1566,26 @@ function downloadFullPacket() {
   const body = ordered.map((s, i) => buildSessionPages(s, tz, i > 0)).join("");
 
   const origHtml = btn ? btn.innerHTML : "";
-  if (btn) { btn.disabled = true; btn.innerHTML = "Building packet…"; }
+
+  // Rough estimate: ~1.4s per session (layout + photo capture). We can't know
+  // the real duration, so this just counts down for feel; if it reaches 0
+  // before the PDF finishes we hold at "almost there…".
+  let remaining = Math.max(4, Math.ceil(ordered.length * 1.4));
+  let timer = null;
+  if (btn) {
+    btn.disabled = true;
+    const tick = () => {
+      btn.innerHTML = remaining > 0
+        ? `Building packet… (${remaining}s)`
+        : "Building packet… almost there…";
+      if (remaining > 0) remaining--;
+    };
+    tick();
+    timer = setInterval(tick, 1000);
+  }
 
   renderHtmlToPdf(body, "skill-building-institute-full-packet.pdf").finally(() => {
+    if (timer) clearInterval(timer);
     if (btn) { btn.disabled = false; btn.innerHTML = origHtml; }
   });
 }

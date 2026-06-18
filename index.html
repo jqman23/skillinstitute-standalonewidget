@@ -742,7 +742,7 @@ function getUtcOffsetMinutes(zone) {
 function easternToUtc(dateStr, timeStr) {
   const [y,m,d] = dateStr.split("-").map(Number);
   const [h,mi] = timeStr.split(":").map(Number);
-  return new Date(Date.UTC(y, m-1, d, h+7, mi)); // stored times are in PDT (UTC-7)
+  return new Date(Date.UTC(y, m-1, d, h+6, mi)); // stored times are in MDT (UTC-6)
 }
 function formatInTz(dt, tz) {
   return new Intl.DateTimeFormat("en-US",{hour:"numeric",minute:"2-digit",timeZone:tz}).format(dt);
@@ -816,8 +816,8 @@ const CDN = "https://custom.cvent.com/AE944F71438646268B70FF5BF3772347/files/eve
 const sessions = [
   {
     code: "FAMI4876",
-    startDate:"2026-10-06", startTime:"06:00",
-    endDate:"2026-10-06",   endTime:"09:30",
+    startDate:"2026-10-06", startTime:"03:00",
+    endDate:"2026-10-06",   endTime:"06:30",
     title: "Family Group Decision Making",
     subtitle: "Practice Skills for Social Workers and Coordinators",
     tagLabels: ["Facilitation","Family Engagement","Child Voice"],
@@ -834,8 +834,8 @@ const sessions = [
   },
   {
     code: "AMPL6868",
-    startDate:"2026-10-06", startTime:"10:00",
-    endDate:"2026-10-06",   endTime:"13:30",
+    startDate:"2026-10-06", startTime:"07:00",
+    endDate:"2026-10-06",   endTime:"10:30",
     title: "Amplifying Unheard Voices",
     subtitle: "Practical Skills for Power-Sharing and Lived Expertise in Child Welfare",
     tagLabels: ["Lived Experience","Facilitation","Power-Sharing"],
@@ -852,8 +852,8 @@ const sessions = [
   },
   {
     code: "THES5655",
-    startDate:"2026-10-06", startTime:"10:00",
-    endDate:"2026-10-06",   endTime:"13:30",
+    startDate:"2026-10-06", startTime:"07:00",
+    endDate:"2026-10-06",   endTime:"10:30",
     title: "The Space Between Intention and Impact",
     subtitle: "A Professional Dangerousness Training",
     tagLabels: ["Professional Development","Reflection","Team Practice"],
@@ -871,8 +871,8 @@ const sessions = [
   },
   {
     code: "CURI9149",
-    startDate:"2026-10-06", startTime:"12:00",
-    endDate:"2026-10-06",   endTime:"15:30",
+    startDate:"2026-10-06", startTime:"09:00",
+    endDate:"2026-10-06",   endTime:"12:30",
     title: "Curiosity Is Key",
     subtitle: "Leading Change in a Compliance Driven Culture",
     tagLabels: ["Leadership","Coaching","Systems Change"],
@@ -891,8 +891,8 @@ const sessions = [
   },
   {
     code: "SKIL4831",
-    startDate:"2026-10-06", startTime:"12:00",
-    endDate:"2026-10-06",   endTime:"15:30",
+    startDate:"2026-10-06", startTime:"09:00",
+    endDate:"2026-10-06",   endTime:"12:30",
     title: "From Engagement to Power",
     subtitle: "Practicing Ethical, Lived-Experience-Led Change",
     tagLabels: ["Lived Experience","Ethical Practice","Systems Change"],
@@ -909,8 +909,8 @@ const sessions = [
   },
   {
     code: "THEW1543",
-    startDate:"2026-10-06", startTime:"12:00",
-    endDate:"2026-10-06",   endTime:"15:30",
+    startDate:"2026-10-06", startTime:"09:00",
+    endDate:"2026-10-06",   endTime:"12:30",
     title: "The Weight of the Gold Standard",
     subtitle: "Navigating the Intricacies of Kinship Care with Relational Intelligence",
     tagLabels: ["Kinship Care","Trauma-Informed","Relational Intelligence"],
@@ -927,8 +927,8 @@ const sessions = [
   },
   {
     code: "TRAI6086",
-    startDate:"2026-10-06", startTime:"14:00",
-    endDate:"2026-10-06",   endTime:"17:30",
+    startDate:"2026-10-06", startTime:"11:00",
+    endDate:"2026-10-06",   endTime:"14:30",
     title: "Train Your Brain for Better Work",
     subtitle: "Practical Mindfulness That Sticks",
     tagLabels: ["Leadership","Mindfulness","Wellbeing"],
@@ -947,8 +947,8 @@ const sessions = [
   },
   {
     code: "SKIL4607",
-    startDate:"2026-10-06", startTime:"14:00",
-    endDate:"2026-10-06",   endTime:"17:30",
+    startDate:"2026-10-06", startTime:"11:00",
+    endDate:"2026-10-06",   endTime:"14:30",
     title: "Working Relationally",
     subtitle: "Strengthening Families, Networks, and Hope",
     tagLabels: ["Relational Practice","Family Systems","Strengths-Based"],
@@ -965,8 +965,8 @@ const sessions = [
   },
   {
     code: "STRE8002",
-    startDate:"2026-10-06", startTime:"16:00",
-    endDate:"2026-10-06",   endTime:"19:30",
+    startDate:"2026-10-06", startTime:"13:00",
+    endDate:"2026-10-06",   endTime:"16:30",
     title: "Strengthening Families",
     subtitle: "Turning Protective Factors into Action",
     tagLabels: ["Protective Factors","Prevention","Family Strengths"],
@@ -983,8 +983,8 @@ const sessions = [
   },
   {
     code: "SKIL8010",
-    startDate:"2026-10-06", startTime:"16:00",
-    endDate:"2026-10-06",   endTime:"19:30",
+    startDate:"2026-10-06", startTime:"13:00",
+    endDate:"2026-10-06",   endTime:"16:30",
     title: "Navigating Conflict in Meeting Spaces",
     subtitle: "Regulation, Power, and Repair",
     tagLabels: ["Conflict","Co-Regulation","Facilitation"],
@@ -1001,9 +1001,9 @@ const sessions = [
   },
   {
     code: "BELO5612",
-    startDate:"2026-10-06", startTime:"06:00",
-    endDate:"2026-10-06",   endTime:"09:30",
-    title: "Belonging-Focused Foster Care",
+    startDate:"2026-10-06", startTime:"07:00",
+    endDate:"2026-10-06",   endTime:"10:30",
+    title: "Belonging-focused Foster Care",
     subtitle: "A Collaborative Approach for Carers, Parents, and Families",
     tagLabels: ["Foster Care","Belonging","Family Collaboration"],
     description: "Foster care services face many challenges most pressing is the fact too often young people leave care isolated and with few people supporting them. This Skill Building Institute offers a practical, belonging-focused vision for transforming foster care, by bringing carers, parents and extended family together, to work collaboratively to improve the experience and outcomes of foster care for all involved. The workshop will be grounded in case examples where fostering has been undertaken as a collaboration between carers, the parents and extended family. The processes and practices that underpin this belonging-focused approach will be described in detail and participants actively involved in the learning through discussions and breakout room exercises throughout the workshop.",
@@ -1021,7 +1021,7 @@ const sessions = [
 ];
 
 // ─── TIME SLOTS ────────────────────────────────────────────────────────────
-const slotOrder = ["2026-10-06T06:00","2026-10-06T10:00","2026-10-06T12:00","2026-10-06T14:00","2026-10-06T16:00"];
+const slotOrder = ["2026-10-06T03:00","2026-10-06T07:00","2026-10-06T09:00","2026-10-06T11:00","2026-10-06T13:00"];
 const slotMap = {};
 sessions.forEach(s => {
   const k = s.startDate + "T" + s.startTime;
@@ -1243,7 +1243,7 @@ function shareLinkedIn(code) {
   const dateObj = new Date(s.startDate + "T12:00:00");
   const dateStr = dateObj.toLocaleDateString("en-US", { weekday:"long", month:"long", day:"numeric", year:"numeric" });
   const fmtTime = t => { const [h,m] = t.split(":"); const hr = +h % 12 || 12; return hr + (m !== "00" ? ":"+m : "") + (+h < 12 ? " AM" : " PM"); };
-  const timeStr = fmtTime(s.startTime) + " – " + fmtTime(s.endTime) + " PDT";
+  const timeStr = fmtTime(s.startTime) + " – " + fmtTime(s.endTime) + " MDT";
   const title = s.title + (s.subtitle ? ": " + s.subtitle : "");
   const descText = (s.description || "").replace(/<[^>]*>/g, "").trim();
   const firstSentence = descText.match(/^[^.!?]+[.!?]/)?.[0] || descText.slice(0, 180);

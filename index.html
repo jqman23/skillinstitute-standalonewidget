@@ -1569,12 +1569,16 @@ function renderHtmlToPdf(bodyHtml, filename) {
       pagebreak: { mode: ["css","legacy"] }
     }).from(iDoc.body).outputPdf("blob");
   }).then(blob => {
-    // The Blob is created by the iframe's jsPDF; re-wrap it into a Blob owned
-    // by THIS document so its object URL stays valid after the iframe is torn
-    // down — on mobile the new-tab load can outlast the iframe otherwise.
-    return blob.arrayBuffer
-      ? blob.arrayBuffer().then(buf => new Blob([buf], { type: "application/pdf" }))
-      : blob;
+    // The Blob is created by the iframe's jsPDF. Re-wrap it into a File owned
+    // by THIS document: (1) its object URL stays valid after the iframe is torn
+    // down, and (2) the File carries the name, so mobile download handlers that
+    // ignore the <a download> attribute (and would otherwise name the file after
+    // the blob: URL's random UUID) still produce the correct filename.
+    if (!blob.arrayBuffer) return blob;
+    return blob.arrayBuffer().then(buf => {
+      try { return new File([buf], filename, { type: "application/pdf" }); }
+      catch (e) { return new Blob([buf], { type: "application/pdf" }); }
+    });
   }).then(blob => {
     saveBlob(blob, filename);
   }).finally(() => {

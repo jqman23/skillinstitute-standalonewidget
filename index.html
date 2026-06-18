@@ -93,6 +93,8 @@ body {
 .view-toggle:hover { border-color: #187089; color: #187089; }
 .view-toggle.active { background: #187089; color: #fff; border-color: #187089; }
 .view-toggle svg { flex-shrink: 0; }
+.packet-btn:hover { border-color: #122345; color: #122345; }
+.packet-btn:disabled { opacity: 0.55; cursor: progress; pointer-events: none; }
 .ctrl-text-btn {
   border: none;
   background: none;
@@ -663,6 +665,14 @@ body {
         <path d="M14 13c0-1.93-1.12-3.6-2.75-4.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
       </svg>
       Show Speakers
+    </button>
+    <div class="ctrl-divider"></div>
+    <button class="view-toggle packet-btn" id="downloadPacket" title="Download every session as one PDF (uses the selected time zone)">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M8 1v9m0 0L4.5 6.5M8 10l3.5-3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M2 11v2.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      Download full Institute packet (PDF)
     </button>
   </div>
 </div>
@@ -1429,18 +1439,18 @@ function shareLinkedIn(code, triggerEl) {
   });
 }
 
-function downloadPDF(code) {
-  const s = sessions.find(x => x.code === code);
-  if (!s) return;
-  const tz        = document.getElementById("timezoneSelect").value;
+const PDF_BANNER = "https://custom.cvent.com/AE944F71438646268B70FF5BF3772347/files/event/e7d15afcf2b14901ab0272ce8a401899/4c40728a45af4e0289e8075b9759c684.png";
+const PDF_SL = "font-size:9px;font-weight:700;color:#187089;text-transform:uppercase;letter-spacing:0.06em;border-bottom:1.5px solid #e8eaed;padding-bottom:4px;margin-bottom:11px;";
+
+// Build the two content pages (About/Objectives + Presenters) for one session.
+// `firstPageBreak` controls whether this session's first page starts on a new
+// PDF page — used to chain sessions together in the full-packet export.
+function buildSessionPages(s, tz, firstPageBreak) {
   const abbr      = getTzAbbr(tz);
   const sUtc      = easternToUtc(s.startDate, s.startTime);
   const eUtc      = easternToUtc(s.endDate,   s.endTime);
   const timeLabel = buildTimeLabel(sUtc, eUtc, tz);
   const dateLabel = sUtc.toLocaleDateString("en-US", { weekday:"long", month:"long", day:"numeric", timeZone:tz });
-
-  const BANNER = "https://custom.cvent.com/AE944F71438646268B70FF5BF3772347/files/event/e7d15afcf2b14901ab0272ce8a401899/4c40728a45af4e0289e8075b9759c684.png";
-  const SL = "font-size:9px;font-weight:700;color:#187089;text-transform:uppercase;letter-spacing:0.06em;border-bottom:1.5px solid #e8eaed;padding-bottom:4px;margin-bottom:11px;";
 
   const objAccent = { why:["#888","#fafafa"], how:["#187089","#f0f7f9"], practice:["#3d8a3d","#f0f7f0"], transfer:["#7c4dbd","#f5f0fc"] };
   const objHtml = ["why","how","practice","transfer"].map(k => {
@@ -1470,33 +1480,36 @@ function downloadPDF(code) {
     </div>`;
   }).join("");
 
-  const filename = s.title.replace(/[^a-z0-9 ]/gi,"").trim().replace(/\s+/g,"-").toLowerCase()+".pdf";
+  const firstBreak = firstPageBreak ? "page-break-before:always;" : "";
 
-  // Build a full standalone HTML doc and write it into a hidden iframe.
-  // html2pdf then runs INSIDE that iframe on its own body — same-origin capture,
-  // no cross-origin canvas taint, no off-screen positioning hacks needed.
+  return `<div style="${firstBreak}">
+  <img src="${PDF_BANNER}" style="width:100%;display:block;" alt="">
+  <div style="padding:20px 38px 36px;">
+    <div style="margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid #e8eaed;">
+      <div style="font-size:7.5px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:5px;">Skill Building Institute</div>
+      <div style="font-size:20px;font-weight:700;color:#122345;line-height:1.2;margin-bottom:3px;">${s.title}</div>
+      <div style="font-size:12px;font-weight:600;color:#187089;margin-bottom:8px;">${s.subtitle}</div>
+      <div style="font-size:10px;font-weight:600;color:#555;">${dateLabel} &nbsp;&middot;&nbsp; ${timeLabel}${abbr?" "+abbr:""}</div>
+    </div>
+    <div style="${PDF_SL}">About This Session</div>
+    <div style="font-size:10px;line-height:1.65;color:#333;margin-bottom:16px;">${s.description}</div>
+    <div style="${PDF_SL}">Learning Objectives</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:0;">${objHtml}</div>
+  </div>
+  <div style="page-break-before:always;padding:20px 38px 36px;">
+    <div style="${PDF_SL}">Presenters</div>
+    ${speakersHtml}
+  </div>
+</div>`;
+}
+
+// Render an HTML body string to a PDF inside an isolated iframe (avoids
+// cross-origin canvas taint) and save it as `filename`.
+function renderHtmlToPdf(bodyHtml, filename) {
   const iframeDoc = `<!DOCTYPE html><html><head><meta charset="utf-8">
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>*{box-sizing:border-box;margin:0;padding:0;}body{font-family:'Montserrat',Arial,sans-serif;background:#fff;width:816px;}</style>
-</head><body>
-<img src="${BANNER}" style="width:100%;display:block;" alt="">
-<div style="padding:20px 38px 36px;">
-  <div style="margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid #e8eaed;">
-    <div style="font-size:7.5px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:5px;">Skill Building Institute</div>
-    <div style="font-size:20px;font-weight:700;color:#122345;line-height:1.2;margin-bottom:3px;">${s.title}</div>
-    <div style="font-size:12px;font-weight:600;color:#187089;margin-bottom:8px;">${s.subtitle}</div>
-    <div style="font-size:10px;font-weight:600;color:#555;">${dateLabel} &nbsp;&middot;&nbsp; ${timeLabel}${abbr?" "+abbr:""}</div>
-  </div>
-  <div style="${SL}">About This Session</div>
-  <div style="font-size:10px;line-height:1.65;color:#333;margin-bottom:16px;">${s.description}</div>
-  <div style="${SL}">Learning Objectives</div>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:0;">${objHtml}</div>
-</div>
-<div style="page-break-before:always;padding:20px 38px 36px;">
-  <div style="${SL}">Presenters</div>
-  ${speakersHtml}
-</div>
-</body></html>`;
+</head><body>${bodyHtml}</body></html>`;
 
   const iframe = document.createElement("iframe");
   iframe.style.cssText = "position:fixed;top:0;left:0;width:816px;height:1100px;border:none;opacity:0.01;pointer-events:none;z-index:99999;";
@@ -1513,7 +1526,7 @@ function downloadPDF(code) {
   );
 
   // Then inject html2pdf into the iframe and run it on the iframe's own body
-  Promise.all(imgReady).then(() => new Promise((res, rej) => {
+  return Promise.all(imgReady).then(() => new Promise((res, rej) => {
     const sc = iDoc.createElement("script");
     sc.src = "https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js";
     sc.onload = res; sc.onerror = rej;
@@ -1529,6 +1542,34 @@ function downloadPDF(code) {
     }).from(iDoc.body).save();
   }).finally(() => {
     setTimeout(() => { try { document.body.removeChild(iframe); } catch(e) {} }, 1500);
+  });
+}
+
+function downloadPDF(code) {
+  const s = sessions.find(x => x.code === code);
+  if (!s) return;
+  const tz = document.getElementById("timezoneSelect").value;
+  const filename = s.title.replace(/[^a-z0-9 ]/gi,"").trim().replace(/\s+/g,"-").toLowerCase()+".pdf";
+  renderHtmlToPdf(buildSessionPages(s, tz, false), filename);
+}
+
+// Concatenate every session (in schedule order, using the selected time zone)
+// into a single "Institute packet" PDF, each session starting on a new page.
+function downloadFullPacket() {
+  const btn = document.getElementById("downloadPacket");
+  const tz = document.getElementById("timezoneSelect").value;
+
+  // Order sessions by their actual start time so the packet follows the agenda.
+  const ordered = sessions.slice().sort((a, b) =>
+    easternToUtc(a.startDate, a.startTime) - easternToUtc(b.startDate, b.startTime));
+
+  const body = ordered.map((s, i) => buildSessionPages(s, tz, i > 0)).join("");
+
+  const origHtml = btn ? btn.innerHTML : "";
+  if (btn) { btn.disabled = true; btn.innerHTML = "Building packet…"; }
+
+  renderHtmlToPdf(body, "skill-building-institute-full-packet.pdf").finally(() => {
+    if (btn) { btn.disabled = false; btn.innerHTML = origHtml; }
   });
 }
 
@@ -1577,6 +1618,7 @@ document.getElementById("filterDayEve").addEventListener("click", function() {
 });
 
 sel.addEventListener("change", () => { render(); if (speakerViewActive) renderSpeakers(); });
+document.getElementById("downloadPacket").addEventListener("click", downloadFullPacket);
 
 function toggleSpBio(btn, id) {
   const bio  = document.getElementById(id);

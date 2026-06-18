@@ -491,13 +491,26 @@ body {
 }
 .linkedin-btn:hover { color: #0A66C2; }
 .li-modal-overlay {
-  position: fixed; inset: 0; background: rgba(0,0,0,0.45);
-  display: flex; align-items: center; justify-content: center;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  min-height: 100%;
+  background: rgba(0,0,0,0.45);
   z-index: 99999;
 }
 .li-modal {
-  background: #fff; border-radius: 12px; padding: 24px;
-  width: min(480px, 92vw); box-shadow: 0 8px 32px rgba(0,0,0,0.22);
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+  background: #fff;
+  border-radius: 12px;
+  padding: 24px;
+  width: min(480px, 92vw);
+  max-height: calc(100vh - 40px);
+  overflow: auto;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.22);
   font-family: "Montserrat", sans-serif;
 }
 .li-modal-header {
@@ -1036,6 +1049,110 @@ sessions.forEach(s => s.speakers.forEach((sp,i) => { speakerLookup[`${s.code}-${
 // ─── STATE ─────────────────────────────────────────────────────────────────
 let showDayEveOnly = false;
 
+
+// ─── PARENT VIEWPORT METRICS FOR EMBEDDED SHARE MODAL ────────────────────────
+let parentScrollTop = 0;
+let parentViewportH = 0;
+let hasParentMetrics = false;
+let pendingMetricsCallbacks = [];
+let linkedInOverlayAnchorEl = null;
+
+function getDocumentHeight() {
+  return Math.max(
+    document.body.offsetHeight,
+    document.documentElement.offsetHeight,
+    document.body.scrollHeight,
+    document.documentElement.scrollHeight
+  );
+}
+
+function requestParentMetrics(onMetrics) {
+  if (typeof onMetrics === "function") {
+    pendingMetricsCallbacks.push(onMetrics);
+  }
+
+  if (window.parent !== window) {
+    window.parent.postMessage({ ggRequestMetrics: true }, "*");
+  } else if (typeof onMetrics === "function") {
+    window.requestAnimationFrame(onMetrics);
+  }
+}
+
+function positionLinkedInOverlay(anchorEl) {
+  const overlay = document.querySelector(".li-modal-overlay");
+  if (!overlay) return;
+
+  const modal = overlay.querySelector(".li-modal");
+  if (!modal) return;
+
+  const docH = getDocumentHeight();
+  overlay.style.height = docH + "px";
+
+  const vh = (hasParentMetrics && parentViewportH)
+    ? parentViewportH
+    : (window.parent === window ? window.innerHeight : 640);
+
+  modal.style.maxHeight = Math.max(240, vh - 40) + "px";
+
+  // Anchor to the clicked Share button first.
+  // Parent viewport metrics are only used to keep it visible, not to recenter it far away.
+  const effectiveAnchor = anchorEl || linkedInOverlayAnchorEl;
+
+  if (effectiveAnchor) {
+    const r = effectiveAnchor.getBoundingClientRect();
+    const modalW = modal.offsetWidth || Math.min(480, window.innerWidth * 0.92);
+    const modalH = modal.offsetHeight || 360;
+
+    const visibleTop = hasParentMetrics ? parentScrollTop : 0;
+    const visibleBottom = hasParentMetrics ? parentScrollTop + vh : docH;
+
+    let top = r.bottom + 12;
+
+    // If opening below the Share button would run off the visible screen, open above it.
+    if (top + modalH > visibleBottom - 12) {
+      top = r.top - modalH - 12;
+    }
+
+    // If above would be too high, clamp inside the visible part of the iframe.
+    if (top < visibleTop + 12) {
+      top = visibleTop + 12;
+    }
+
+    let left = r.left + r.width / 2;
+    const minLeft = modalW / 2 + 12;
+    const maxLeft = Math.max(minLeft, window.innerWidth - modalW / 2 - 12);
+    left = Math.min(Math.max(left, minLeft), maxLeft);
+
+    modal.style.left = left + "px";
+    modal.style.top = top + "px";
+    modal.style.transform = "translateX(-50%)";
+  } else {
+    const top = (hasParentMetrics ? parentScrollTop : window.scrollY) + vh / 2;
+    modal.style.left = "50%";
+    modal.style.top = top + "px";
+    modal.style.transform = "translate(-50%, -50%)";
+  }
+
+  if (anchorEl) linkedInOverlayAnchorEl = anchorEl;
+}
+
+window.addEventListener("message", function(e) {
+  if (!e.data || typeof e.data.ggScrollTop !== "number") return;
+
+  parentScrollTop = e.data.ggScrollTop;
+
+  if (typeof e.data.ggViewportHeight === "number" && e.data.ggViewportHeight > 0) {
+    parentViewportH = e.data.ggViewportHeight;
+  }
+
+  hasParentMetrics = true;
+
+  const callbacks = pendingMetricsCallbacks;
+  pendingMetricsCallbacks = [];
+  callbacks.forEach(cb => cb());
+
+  positionLinkedInOverlay();
+});
 // ─── RENDER ────────────────────────────────────────────────────────────────
 function render() {
   const tz = sel.value;
@@ -1136,7 +1253,7 @@ function render() {
             <svg width="13" height="13" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 12.5h10M8 2v8m0 0L5.5 7.5M8 10l2.5-2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             PDF
           </button>
-          <button class="linkedin-btn" onclick="shareLinkedIn('${s.code}')" title="Share on LinkedIn">
+          <button class="linkedin-btn" onclick="shareLinkedIn('${s.code}', this)" title="Share on LinkedIn">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
             Share
           </button>
@@ -1236,7 +1353,7 @@ function navigateToSession(code) {
 }
 
 
-function shareLinkedIn(code) {
+function shareLinkedIn(code, triggerEl) {
   const s = sessions.find(x => x.code === code);
   if (!s) return;
 
@@ -1273,13 +1390,17 @@ function shareLinkedIn(code) {
     </div>`;
 
   document.body.appendChild(overlay);
+  linkedInOverlayAnchorEl = triggerEl || null;
+  positionLinkedInOverlay(triggerEl || null);
+  requestParentMetrics(positionLinkedInOverlay);
+  notifyHeight();
 
   const ta = overlay.querySelector("#li-post-text");
   const copyBtn = overlay.querySelector("#li-copy-btn");
   const openBtn = overlay.querySelector("#li-open-btn");
   const closeBtn = overlay.querySelector("#li-close-btn");
 
-  const doClose = () => document.body.removeChild(overlay);
+  const doClose = () => { try { document.body.removeChild(overlay); } catch(e) {} linkedInOverlayAnchorEl = null; };
   overlay.addEventListener("click", e => { if (e.target === overlay) doClose(); });
   closeBtn.addEventListener("click", doClose);
 

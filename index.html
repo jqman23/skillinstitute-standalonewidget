@@ -672,7 +672,7 @@ body {
         <path d="M8 1v9m0 0L4.5 6.5M8 10l3.5-3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
         <path d="M2 11v2.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
       </svg>
-      Download full Institute packet (PDF)
+      Download full packet (PDF)
     </button>
   </div>
 </div>
@@ -1570,7 +1570,7 @@ function downloadFullPacket() {
   // Rough estimate: ~1.4s per session (layout + photo capture). We can't know
   // the real duration, so this just counts down for feel; if it reaches 0
   // before the PDF finishes we hold at "almost there…".
-  let remaining = Math.max(4, Math.ceil(ordered.length * 1.4));
+  let remaining = 10;
   let timer = null;
   if (btn) {
     btn.disabled = true;

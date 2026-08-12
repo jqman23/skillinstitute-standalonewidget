@@ -1028,6 +1028,7 @@ const sessions = [
     endDate:"2026-10-06",   endTime:"10:30",
     title: "Belonging-focused Foster Care",
     subtitle: "A Collaborative Approach for Carers, Parents, and Families",
+    flyer: "belongingfocused-foster-care.pdf",
     tagLabels: ["Foster Care","Belonging","Family Collaboration"],
     description: "Foster care services face many challenges most pressing is the fact too often young people leave care isolated and with few people supporting them. This Skill Building Institute offers a practical, belonging-focused vision for transforming foster care, by bringing carers, parents and extended family together, to work collaboratively to improve the experience and outcomes of foster care for all involved. The workshop will be grounded in case examples where fostering has been undertaken as a collaboration between carers, the parents and extended family. The processes and practices that underpin this belonging-focused approach will be described in detail and participants actively involved in the learning through discussions and breakout room exercises throughout the workshop.",
     objectives: {
@@ -1589,8 +1590,23 @@ function renderHtmlToPdf(bodyHtml, filename) {
 function downloadPDF(code) {
   const s = sessions.find(x => x.code === code);
   if (!s) return;
-  const tz = document.getElementById("timezoneSelect").value;
   const filename = s.title.replace(/[^a-z0-9 ]/gi,"").trim().replace(/\s+/g,"-").toLowerCase()+".pdf";
+
+  if (s.flyer) {
+    fetch(s.flyer)
+      .then(response => {
+        if (!response.ok) throw new Error(`Flyer request failed: ${response.status}`);
+        return response.blob();
+      })
+      .then(blob => saveBlob(blob, filename))
+      .catch(err => {
+        console.error("PDF download failed", err);
+        alert("Sorry — the PDF couldn't be downloaded. Please try again.");
+      });
+    return;
+  }
+
+  const tz = document.getElementById("timezoneSelect").value;
   renderHtmlToPdf(buildSessionPages(s, tz, false), filename).catch(err => {
     console.error("PDF generation failed", err);
     alert("Sorry — the PDF couldn't be generated. Please try again.");

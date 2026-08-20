@@ -394,6 +394,9 @@ body {
   color: #187089;
   border: 1px solid rgba(24, 112, 137, 0.35);
 }
+.card-status-row {
+  margin-bottom: 6px;
+}
 
 .card-title {
   font-size: 1.02rem;
@@ -1229,9 +1232,9 @@ function render() {
 
     visible.forEach(s => {
       const statusHtml = s.capacity === "full"
-        ? `<span class="card-status">At Capacity · Waitlist Available</span>`
+        ? `<div class="card-status-row"><span class="card-status">At Capacity · Waitlist Available</span></div>`
         : "";
-      const tagsHtml = statusHtml + s.tagLabels.map(t=>`<span class="card-tag">${t}</span>`).join("");
+      const tagsHtml = s.tagLabels.map(t=>`<span class="card-tag">${t}</span>`).join("");
 
       const speakersHtml = s.speakers.map((sp,i) => {
         const imgSrc = sp.photo || `https://placehold.co/32x32/e8eaed/888?text=${encodeURIComponent((sp.name||"?")[0])}`;
@@ -1266,6 +1269,7 @@ function render() {
       card.innerHTML = `
         <div class="card-accent"></div>
         <div class="card-body">
+          ${statusHtml}
           <div class="card-tags">${tagsHtml}</div>
           <div class="card-title">${s.title}</div>
           <div class="card-subtitle">${s.subtitle}</div>

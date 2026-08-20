@@ -1700,6 +1700,8 @@ const STATUS_HOVER_TEXT = "This institute is currently at capacity, but you can 
 
 function showStatusTooltip(anchor) {
   statusTooltipText.textContent = STATUS_HOVER_TEXT;
+  statusTooltip.style.display  = "block";
+  statusTooltip.style.visibility = "hidden";
   const rect = anchor.getBoundingClientRect();
   const ttW  = statusTooltip.offsetWidth  || 280;
   const ttH  = statusTooltip.offsetHeight || 60;
@@ -1710,7 +1712,7 @@ function showStatusTooltip(anchor) {
   if (left < 8) left = 8;
   statusTooltip.style.top  = top  + "px";
   statusTooltip.style.left = left + "px";
-  statusTooltip.style.display = "block";
+  statusTooltip.style.visibility = "visible";
 }
 
 function hideStatusTooltip() { statusTooltip.style.display = "none"; }

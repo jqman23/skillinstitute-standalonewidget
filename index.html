@@ -390,12 +390,13 @@ body {
   text-transform: uppercase;
   padding: 4px 10px;
   border-radius: 50px;
-  background: #edf7fa;
-  color: #187089;
-  border: 1px solid rgba(24, 112, 137, 0.35);
+  background: #fdf0e3;
+  color: #b45309;
+  border: 1px solid rgba(180, 83, 9, 0.4);
+  cursor: help;
 }
 .card-status-row {
-  margin-bottom: 6px;
+  margin-bottom: 12px;
 }
 
 .card-title {
@@ -726,6 +727,13 @@ body {
       </div>
     </div>
     <div id="ttBio" style="font-size:0.75rem;line-height:1.5;color:#444;border-top:1px solid #f0f2f5;padding-top:8px;white-space:pre-line;"></div>
+  </div>
+</div>
+
+<!-- STATUS TOOLTIP -->
+<div id="statusTooltip" style="display:none;position:fixed;z-index:9999;pointer-events:none;width:280px;">
+  <div style="background:#fff;border:1.5px solid #e8eaed;border-radius:12px;padding:12px 14px;box-shadow:0 8px 28px rgba(0,0,0,0.15);">
+    <div id="statusTooltipText" style="font-size:0.75rem;line-height:1.5;color:#444;"></div>
   </div>
 </div>
 
@@ -1294,6 +1302,11 @@ function render() {
         </div>
       `;
       grid.appendChild(card);
+      const statusPill = card.querySelector(".card-status");
+      if (statusPill) {
+        statusPill.addEventListener("mouseenter", () => showStatusTooltip(statusPill));
+        statusPill.addEventListener("mouseleave", hideStatusTooltip);
+      }
     });
 
     main.appendChild(section);
@@ -1680,6 +1693,27 @@ const ttName  = document.getElementById("ttName");
 const ttTitle = document.getElementById("ttTitle");
 const ttOrg   = document.getElementById("ttOrg");
 const ttBio   = document.getElementById("ttBio");
+
+const statusTooltip     = document.getElementById("statusTooltip");
+const statusTooltipText = document.getElementById("statusTooltipText");
+const STATUS_HOVER_TEXT = "This institute is currently at capacity, but you can still select it during registration to join the waitlist. We recommend registering for Skill Building Institutes early to help secure your spot.";
+
+function showStatusTooltip(anchor) {
+  statusTooltipText.textContent = STATUS_HOVER_TEXT;
+  const rect = anchor.getBoundingClientRect();
+  const ttW  = statusTooltip.offsetWidth  || 280;
+  const ttH  = statusTooltip.offsetHeight || 60;
+  let top  = rect.top - ttH - 12;
+  if (top < 8) top = rect.bottom + 12;
+  let left = rect.left;
+  if (left + ttW > window.innerWidth - 8) left = window.innerWidth - ttW - 8;
+  if (left < 8) left = 8;
+  statusTooltip.style.top  = top  + "px";
+  statusTooltip.style.left = left + "px";
+  statusTooltip.style.display = "block";
+}
+
+function hideStatusTooltip() { statusTooltip.style.display = "none"; }
 
 function attachTooltips() {
   document.querySelectorAll(".speaker-chip").forEach(chip => {
